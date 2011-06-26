@@ -35,16 +35,16 @@ namespace Gst {
       get {
         if (message == IntPtr.Zero)
           return null;
-        return Gst.GLib.Marshaller.Utf8PtrToString (message);
+        return GLib.Marshaller.Utf8PtrToString (message);
       } set {
         if (message != IntPtr.Zero)
-          Gst.GLib.Marshaller.Free (message);
-        message = Gst.GLib.Marshaller.StringToPtrGStrdup (value);
+          GLib.Marshaller.Free (message);
+        message = GLib.Marshaller.StringToPtrGStrdup (value);
       }
     }
 
     public void Unset () {
-      Gst.GLib.Marshaller.Free (message);
+      GLib.Marshaller.Free (message);
       message = IntPtr.Zero;
       code = 0;
       domain_quark = 0;

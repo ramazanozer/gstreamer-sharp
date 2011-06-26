@@ -77,13 +77,13 @@ namespace GtkSharp.Generation {
 
 		public override bool Validate ()
 		{
+			LogWriter log = new LogWriter (QualifiedName);
+
 			ArrayList invalids = new ArrayList ();
 
 			foreach (ChildProperty prop in childprops.Values) {
-				if (!prop.Validate ()) {
-					Console.WriteLine ("in Object " + QualifiedName);
+				if (!prop.Validate (log))
 					invalids.Add (prop);
-				}
 			}
 			foreach (ChildProperty prop in invalids)
 				childprops.Remove (prop);
@@ -129,7 +129,7 @@ namespace GtkSharp.Generation {
 
 		public override void Generate (GenerationInfo gen_info)
 		{
-			gen_info.CurrentType = Name;
+			gen_info.CurrentType = QualifiedName;
 
 			string asm_name = gen_info.AssemblyName.Length == 0 ? NS.ToLower () + "-sharp" : gen_info.AssemblyName;
 			DirectoryInfo di = GetDirectoryInfo (gen_info.Dir, asm_name);
@@ -200,6 +200,12 @@ namespace GtkSharp.Generation {
 				foreach (string iface in interfaces) {
 					ClassBase igen = table.GetClassGen (iface);
 					foreach (Method m in igen.Methods.Values) {
+						if (m.Name.StartsWith ("Get") || m.Name.StartsWith ("Set")) {
+							if (GetProperty (m.Name.Substring (3)) != null) {
+								collisions[m.Name] = true;
+								continue;
+							}
+						}
 						Method collision = all_methods[m.Name] as Method;
 						if (collision != null && collision.Signature.Types == m.Signature.Types)
 							collisions[m.Name] = true;
@@ -253,7 +259,7 @@ namespace GtkSharp.Generation {
 				gen_info.Writer.WriteLine();
 				gen_info.Writer.WriteLine("\t\tprotected " + Name + "() : base(IntPtr.Zero)");
 				gen_info.Writer.WriteLine("\t\t{");
-				gen_info.Writer.WriteLine("\t\t\tCreateNativeObject (new string [0], new Gst.GLib.Value [0]);");
+				gen_info.Writer.WriteLine("\t\t\tCreateNativeObject (new string [0], new GLib.Value [0]);");
 				gen_info.Writer.WriteLine("\t\t}");
 			}
 			gen_info.Writer.WriteLine();
@@ -302,10 +308,10 @@ namespace GtkSharp.Generation {
 			if (cs_parent == "")
 				sw.WriteLine ("\t\tstatic uint class_offset = 0;");
 			else
-				sw.WriteLine ("\t\tstatic uint class_offset = ((Gst.GLib.GType) typeof ({0})).GetClassSize ();", cs_parent);
+				sw.WriteLine ("\t\tstatic uint class_offset = ((GLib.GType) typeof ({0})).GetClassSize ();", cs_parent);
 			sw.WriteLine ("\t\tstatic Hashtable class_structs;");
 			sw.WriteLine ();
-			sw.WriteLine ("\t\tstatic {0} GetClassStruct (Gst.GLib.GType gtype, bool use_cache)", class_struct_name);
+			sw.WriteLine ("\t\tstatic {0} GetClassStruct (GLib.GType gtype, bool use_cache)", class_struct_name);
 			sw.WriteLine ("\t\t{");
 			sw.WriteLine ("\t\t\tif (class_structs == null)");
 			sw.WriteLine ("\t\t\t\tclass_structs = new Hashtable ();");
@@ -321,7 +327,7 @@ namespace GtkSharp.Generation {
 			sw.WriteLine ("\t\t\t}");
 			sw.WriteLine ("\t\t}");
 			sw.WriteLine ();
-			sw.WriteLine ("\t\tstatic void OverrideClassStruct (Gst.GLib.GType gtype, {0} class_struct)", class_struct_name);
+			sw.WriteLine ("\t\tstatic void OverrideClassStruct (GLib.GType gtype, {0} class_struct)", class_struct_name);
 			sw.WriteLine ("\t\t{");
 			sw.WriteLine ("\t\t\tIntPtr class_ptr = new IntPtr (gtype.GetClassPtr ().ToInt64 () + class_offset);");
 			sw.WriteLine ("\t\t\tMarshal.StructureToPtr (class_struct, class_ptr, false);");
@@ -335,7 +341,7 @@ namespace GtkSharp.Generation {
 			for (int i = 1; i < cname.Length; i++) {
 				if (Char.IsUpper (cname[i])) {
 					if (i == 1 && cname[0] == 'G')
-						return "Gst.GLib." + cname.Substring (1);
+						return "GLib." + cname.Substring (1);
 					else
 						return cname.Substring (0, i) + "." + cname.Substring (i);
 				}
@@ -398,7 +404,7 @@ namespace GtkSharp.Generation {
 	
 			foreach (string key in dir_info.objects.Keys) {
 				if (GetExpected(key) != ((string) dir_info.objects[key]))
-					sw.WriteLine ("\t\t\tGst.GLib.GType.Register ({0}.GType, typeof ({0}));", dir_info.objects [key]);
+					sw.WriteLine ("\t\t\tGLib.GType.Register ({0}.GType, typeof ({0}));", dir_info.objects [key]);
 			}
 					
 			sw.WriteLine ("\t\t}");

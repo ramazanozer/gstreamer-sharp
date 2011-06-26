@@ -1,24 +1,20 @@
 		[GLib.Signal("child-added")]
 		event Gst.ChildAddedHandler Gst.ChildProxy.ChildAdded {
 			add {
-				GLib.Signal sig = GLib.Signal.Lookup (GLib.Object.GetObject (Handle), "child-added", typeof (Gst.ChildAddedArgs));
-				sig.AddDelegate (value);
+				this.AddSignalHandler ("child-added", value, typeof (Gst.ChildAddedArgs));
 			}
 			remove {
-				GLib.Signal sig = GLib.Signal.Lookup (GLib.Object.GetObject (Handle), "child-added", typeof (Gst.ChildAddedArgs));
-				sig.RemoveDelegate (value);
+				this.RemoveSignalHandler ("child-added", value);
 			}
 		}
 
 		[GLib.Signal("child-removed")]
 		event Gst.ChildRemovedHandler Gst.ChildProxy.ChildRemoved {
 			add {
-				GLib.Signal sig = GLib.Signal.Lookup (GLib.Object.GetObject (Handle), "child-removed", typeof (Gst.ChildRemovedArgs));
-				sig.AddDelegate (value);
+				this.AddSignalHandler ("child-removed", value, typeof (Gst.ChildRemovedArgs));
 			}
 			remove {
-				GLib.Signal sig = GLib.Signal.Lookup (GLib.Object.GetObject (Handle), "child-removed", typeof (Gst.ChildRemovedArgs));
-				sig.RemoveDelegate (value);
+				this.RemoveSignalHandler ("child-removed", value);
 			}
 		}
 

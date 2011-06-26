@@ -1,8 +1,9 @@
-// ConstFilenameGen.cs - The Const Filename type Generatable.
+// GtkSharp.Generation.ManualGen.cs - Ungenerated handle type Generatable.
 //
-// Author:  Mike Kestner <mkestner@novell.com>
+// Author: Mike Kestner <mkestner@novell.com>
 //
-// Copyright (c) 2005 Novell, Inc.
+// Copyright (c) 2003 Mike Kestner
+// Copyright (c) 2004 Novell, Inc.
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of version 2 of the GNU General Public
@@ -23,29 +24,27 @@ namespace GtkSharp.Generation {
 
 	using System;
 
-	public class ConstFilenameGen : SimpleBase, IManualMarshaler {
+	public class OwnableGen : SimpleBase, IOwnable {
 		
-		public ConstFilenameGen (string ctype) : base (ctype, "string", "null") {}
+		public OwnableGen (string ctype, string type) : base (ctype, type, "null") {}
 
 		public override string MarshalType {
-			get {
-				return "IntPtr";
-			}
+			get { return "IntPtr"; }
+		}
+
+		public override string CallByName (string var_name)
+		{
+			return var_name + " == null ? IntPtr.Zero : " + var_name + ".Handle";
 		}
 		
 		public override string FromNative (string var)
 		{
-			return "GLib.Marshaller.FilenamePtrToString (" + var + ")";
+			return String.Format ("new {0} ({1})", QualifiedName, var);
 		}
-
-		public string AllocNative (string managed_var)
+		
+		public string FromNative (string var, bool owned)
 		{
-			return "GLib.Marshaller.StringToFilenamePtr (" + managed_var + ")";
-		}
-
-		public string ReleaseNative (string native_var)
-		{
-			return "GLib.Marshaller.Free (" + native_var + ")";
+			return String.Format ("new {0} ({1}, {2})", QualifiedName, var, owned ? "true" : "false");
 		}
 	}
 }

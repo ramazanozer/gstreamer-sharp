@@ -1,4 +1,4 @@
-public Event (Gst.GLib.Value val) : base (val) { }
+public Event (GLib.Value val) : base (val) { }
 
 [DllImport ("gstreamersharpglue-0.10.dll") ]
 extern static uint gstsharp_gst_event_get_timestamp_offset ();
@@ -35,7 +35,7 @@ public Gst.Object Src {
   get {
     unsafe {
       IntPtr* raw_ptr = (IntPtr*) ( ( (byte*) Handle) + src_offset);
-      return Gst.GLib.Object.GetObject ( (*raw_ptr)) as Gst.Object;
+      return GLib.Object.GetObject ( (*raw_ptr)) as Gst.Object;
     }
   } set {
     if (!IsWritable)
@@ -82,7 +82,7 @@ public Gst.Structure Structure {
       return cached_structure;
 
     IntPtr raw_ret = gst_event_get_structure (Handle);
-    Gst.Structure ret = raw_ret == IntPtr.Zero ? null : (Gst.Structure) Gst.GLib.Opaque.GetOpaque (raw_ret, typeof (Gst.Structure), true);
+    Gst.Structure ret = raw_ret == IntPtr.Zero ? null : (Gst.Structure) GLib.Opaque.GetOpaque (raw_ret, typeof (Gst.Structure), true);
     if (ret != null)
       ret.FreeNative = false;
     cached_structure = ret;
@@ -227,7 +227,7 @@ public void ParseTag (out TagList tags) {
   if (raw_ptr == IntPtr.Zero)
     tags = null;
   else
-    tags = (TagList) Gst.GLib.Opaque.GetOpaque (raw_ptr, typeof (TagList), true);
+    tags = (TagList) GLib.Opaque.GetOpaque (raw_ptr, typeof (TagList), true);
 }
 
 

@@ -172,6 +172,8 @@ namespace GtkSharp.Generation {
 				}
 			} else if (type == "manual")
 				result = new ManualGen (cname, name);
+			else if (type == "ownable")
+				result = new OwnableGen (cname, name);
 			else if (type == "alias")
 				result = new AliasGen (cname, name);
 			else if (type == "marshal") {
@@ -179,6 +181,8 @@ namespace GtkSharp.Generation {
 				string call = symbol.GetAttribute ("call_fmt");
 				string from = symbol.GetAttribute ("from_fmt");
 				result = new MarshalGen (cname, name, mtype, call, from);
+			} else if (type == "struct") {
+				result = new ByRefGen (symbol.GetAttribute ("cname"), symbol.GetAttribute ("name"));
 			} else
 				Console.WriteLine ("Parser::ParseSymbol - Unexpected symbol type " + type);
 

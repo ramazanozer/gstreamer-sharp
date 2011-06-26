@@ -43,14 +43,13 @@ namespace GtkSharp.Generation {
 					user_data_param = parms[i+1].Name;
 					destroy_param = parms[i+2].Name;
 					i += 2;
-				} else if (p.IsUserData && parms.IsHidden (p)) {
+				} else if ((p.IsCount || p.IsUserData) && parms.IsHidden (p)) {
 					user_data_param = p.Name;
 					continue;
 				} else if (p is ErrorParameter) {
 					error_param = p.Name;
 					continue;
 				}
-
 				this.parms.Add (p);
 
 				if (p.PassAs != String.Empty && (p.Name != p.FromNative (p.Name)))
@@ -164,6 +163,7 @@ namespace GtkSharp.Generation {
 					ret += indent + p.Name + " = " + igen.CallByName ("my" + p.Name) + ";\n";
 				}
 			}
+
 			return ret;
 		}
 	}

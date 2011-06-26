@@ -13,7 +13,7 @@ public class BaseTransformTest {
   private class MyTransformIp : Gst.Base.BaseTransform {
 
     public static bool Register () {
-      Gst.GLib.GType gtype = (Gst.GLib.GType) typeof (MyTransformIp);
+      GLib.GType gtype = (GLib.GType) typeof (MyTransformIp);
       SetDetails (gtype, "My Transform", "Filter/Transform", "Do nothing useful", "Nobody");
 
       Caps caps = Caps.FromString ("foo/bar");
@@ -42,7 +42,7 @@ public class BaseTransformTest {
     pipeline.Add (src, transform, sink);
     Element.Link (src, transform, sink);
 
-    Gst.GLib.MainLoop loop = new Gst.GLib.MainLoop ();
+    GLib.MainLoop loop = new GLib.MainLoop ();
 
     pipeline.Bus.AddWatch (delegate (Bus bus, Message message) {
                              switch (message.Type) {
@@ -70,7 +70,7 @@ public class BaseTransformTest {
     public bool transformed = false;
 
     public static bool Register () {
-      Gst.GLib.GType gtype = (Gst.GLib.GType) typeof (MyTransformNIp);
+      GLib.GType gtype = (GLib.GType) typeof (MyTransformNIp);
       SetDetails (gtype, "My Transform", "Filter/Transform", "Do nothing useful", "Nobody");
 
       Caps caps = Caps.FromString ("foo/bar");
@@ -113,7 +113,7 @@ public class BaseTransformTest {
     pipeline.Add (src, capsfilter, transform, sink);
     Element.Link (src, capsfilter, transform, sink);
 
-    Gst.GLib.MainLoop loop = new Gst.GLib.MainLoop ();
+    GLib.MainLoop loop = new GLib.MainLoop ();
 
     pipeline.Bus.AddWatch (delegate (Bus bus, Message message) {
                              switch (message.Type) {

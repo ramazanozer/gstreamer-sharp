@@ -111,7 +111,7 @@ namespace GtkSharp.Generation {
 						sw.WriteLine (indent + "\t\t\t\t{0} = null;", parameters [i + 2].Name);
 						sw.WriteLine (indent + "\t\t\t} else {");
 						sw.WriteLine (indent + "\t\t\t\t{0} = (IntPtr) GCHandle.Alloc ({1}_wrapper);", parameters [i + 1].Name, name);
-						sw.WriteLine (indent + "\t\t\t\t{0} = Gst.GLib.DestroyHelper.NotifyHandler;", parameters [i + 2].Name, parameters [i + 2].CSType);
+						sw.WriteLine (indent + "\t\t\t\t{0} = GLib.DestroyHelper.NotifyHandler;", parameters [i + 2].Name, parameters [i + 2].CSType);
 						sw.WriteLine (indent + "\t\t\t}");
 						break;
 
@@ -122,7 +122,7 @@ namespace GtkSharp.Generation {
 					case "call":
 					default:
 						if (p.Scope == String.Empty)
-							Console.WriteLine ("Defaulting " + gen.Name + " param to 'call' scope in method " + gen_info.CurrentMember);
+							Console.WriteLine (gen_info.CurrentMember + " - defaulting " + gen.Name + " param to 'call' scope. Specify callback scope (call|async|notified) attribute with fixup.");
 						sw.WriteLine (indent + "\t\t\t{0} {1}_wrapper = new {0} ({1});", wrapper, name);
 						break;
 					}
@@ -140,9 +140,12 @@ namespace GtkSharp.Generation {
 
 		public void Finish (StreamWriter sw, string indent)
 		{
-			foreach (Parameter p in parameters)
+			foreach (Parameter p in parameters) {
+				if (parameters.IsHidden (p))
+					continue;
 				foreach (string s in p.Finish)
 					sw.WriteLine(indent + "\t\t\t" + s);
+			}
 		}
 
 		public void FinishAccessor (StreamWriter sw, Signature sig, string indent)
@@ -154,7 +157,7 @@ namespace GtkSharp.Generation {
 		{
 			if (!ThrowsException)
 				return;
-			sw.WriteLine (indent + "\t\t\tif (error != IntPtr.Zero) throw new Gst.GLib.GException (error);");
+			sw.WriteLine (indent + "\t\t\tif (error != IntPtr.Zero) throw new GLib.GException (error);");
 		}
 		
 		public bool ThrowsException {

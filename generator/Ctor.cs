@@ -94,9 +94,6 @@ namespace GtkSharp.Generation {
 
 		public void Generate (GenerationInfo gen_info)
 		{
-			if (!Validate ())
-				return;
-
 			StreamWriter sw = gen_info.Writer;
 			gen_info.CurrentMember = CName;
 
@@ -113,9 +110,9 @@ namespace GtkSharp.Generation {
 					
 					if (Parameters.Count == 0) {
 						if (mini_object)
-						  sw.WriteLine ("\t\t\t\tCreateNativeObject ();");
+							sw.WriteLine ("\t\t\t\tCreateNativeObject ();");
 						else
-						  sw.WriteLine ("\t\t\t\tCreateNativeObject (new string [0], new Gst.GLib.Value[0]);");
+							sw.WriteLine ("\t\t\t\tCreateNativeObject (new string [0], new GLib.Value[0]);");
 						sw.WriteLine ("\t\t\t\treturn;");
 					} else {
 						if (mini_object)
@@ -144,13 +141,13 @@ namespace GtkSharp.Generation {
 									indent += "\t";
 								}
 								sw.WriteLine (indent + "names.Add (\"" + names [i] + "\");");
-								sw.WriteLine (indent + "vals.Add (new Gst.GLib.Value (" + values[i] + "));");
+								sw.WriteLine (indent + "vals.Add (new GLib.Value (" + values[i] + "));");
 
 								if (p.Generatable is ClassBase && !(p.Generatable is StructBase))
 									sw.WriteLine ("\t\t\t\t}");
 							}
 
-							sw.WriteLine ("\t\t\t\tCreateNativeObject ((string[])names.ToArray (typeof (string)), (Gst.GLib.Value[])vals.ToArray (typeof (Gst.GLib.Value)));");
+							sw.WriteLine ("\t\t\t\tCreateNativeObject ((string[])names.ToArray (typeof (string)), (GLib.Value[])vals.ToArray (typeof (GLib.Value)));");
 							sw.WriteLine ("\t\t\t\treturn;");
 						} else
 							sw.WriteLine ("\t\t\t\tthrow new InvalidOperationException (\"Can't override this constructor.\");");

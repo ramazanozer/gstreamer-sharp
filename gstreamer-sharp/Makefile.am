@@ -57,8 +57,7 @@ sources = \
 	NavigationEvent.cs \
 	NavigationQuery.cs \
 	VideoEvent.cs \
-	coreplugins/*.cs \
-	glib-sharp/*.cs
+	coreplugins/*.cs
 
 overrides = \
 	$(srcdir)/override/URIHandlerAdapter.cs \

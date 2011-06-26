@@ -1,6 +1,4 @@
-// GtkSharp.Generation.ClassField.cs - used in class structures
-//
-// Copyright (c) 2009 Christian Hoff
+// Copyright (c) 2011 Novell, Inc.
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of version 2 of the GNU General Public
@@ -19,29 +17,8 @@
 
 namespace GtkSharp.Generation {
 
-	using System;
-	using System.Collections;
-	using System.IO;
-	using System.Xml;
+	public interface IOwnable {
 
-	public class ClassField : StructField {
-		protected new ObjectBase container_type;
-
-		public ClassField (XmlElement elem, ObjectBase container_type) : base (elem, container_type) {
-			this.container_type = container_type;
-		}
-
-		public override bool Validate (LogWriter log)
-		{
-			if (!base.Validate (log))
-				return false;
-
-			if (IsBitfield) {
-				log.Warn ("bitfields are not supported");
-				return false;
-			}
-
-			return true;
-		}
+		string FromNative (string var, bool owned);
 	}
 }

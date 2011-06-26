@@ -8,10 +8,10 @@ public void VolumeChanged (Gst.Interfaces.MixerTrack track, int[] volumes) {
   if (volumes.Length != track.NumChannels)
     throw new ArgumentOutOfRangeException ();
 
-  IntPtr native_volumes = Gst.GLib.Marshaller.Malloc ( (ulong) (4 * track.NumChannels));
+  IntPtr native_volumes = GLib.Marshaller.Malloc ( (ulong) (4 * track.NumChannels));
   Marshal.Copy (volumes, 0, native_volumes, track.NumChannels);
   gst_mixer_volume_changed (Handle, track.Handle, native_volumes);
-  Gst.GLib.Marshaller.Free (native_volumes);
+  GLib.Marshaller.Free (native_volumes);
 }
 
 [DllImport ("libgstinterfaces-0.10.dll", CallingConvention = CallingConvention.Cdecl) ]
@@ -19,7 +19,7 @@ static extern IntPtr gst_mixer_list_tracks (IntPtr raw);
 
 public Gst.Interfaces.MixerTrack[] ListTracks() {
   IntPtr raw_ret = gst_mixer_list_tracks (Handle);
-  Gst.Interfaces.MixerTrack[] ret = (Gst.Interfaces.MixerTrack[]) Gst.GLib.Marshaller.ListPtrToArray (raw_ret, typeof (Gst.GLib.List), false, false, typeof (Gst.Interfaces.MixerTrack));
+  Gst.Interfaces.MixerTrack[] ret = (Gst.Interfaces.MixerTrack[]) GLib.Marshaller.ListPtrToArray (raw_ret, typeof (GLib.List), false, false, typeof (Gst.Interfaces.MixerTrack));
   return ret;
 }
 
@@ -27,7 +27,7 @@ public Gst.Interfaces.MixerTrack[] ListTracks() {
 static extern void gst_mixer_set_option (IntPtr raw, IntPtr opts, IntPtr value);
 
 public void SetOption (Gst.Interfaces.MixerOptions opts, string value) {
-  gst_mixer_set_option (Handle, opts == null ? IntPtr.Zero : opts.Handle, Gst.GLib.Marshaller.StringToPtrGStrdup (value));
+  gst_mixer_set_option (Handle, opts == null ? IntPtr.Zero : opts.Handle, GLib.Marshaller.StringToPtrGStrdup (value));
 }
 
 [DllImport ("libgstinterfaces-0.10.dll", CallingConvention = CallingConvention.Cdecl) ]
@@ -39,10 +39,10 @@ public void SetVolume (Gst.Interfaces.MixerTrack track, int[] volumes) {
 
   if (volumes.Length != track.NumChannels)
     throw new ArgumentOutOfRangeException ();
-  IntPtr volumes_native = Gst.GLib.Marshaller.Malloc ( (ulong) (4 * track.NumChannels));
+  IntPtr volumes_native = GLib.Marshaller.Malloc ( (ulong) (4 * track.NumChannels));
   Marshal.Copy (volumes, 0, volumes_native, track.NumChannels);
   gst_mixer_set_volume (Handle, track.Handle, volumes_native);
-  Gst.GLib.Marshaller.Free (volumes_native);
+  GLib.Marshaller.Free (volumes_native);
 }
 
 [DllImport ("libgstinterfaces-0.10.dll", CallingConvention = CallingConvention.Cdecl) ]
@@ -60,7 +60,7 @@ public Gst.Interfaces.MixerType MixerType {
 static extern void gst_mixer_option_changed (IntPtr raw, IntPtr opts, IntPtr value);
 
 public void OptionChanged (Gst.Interfaces.MixerOptions opts, string value) {
-  gst_mixer_option_changed (Handle, opts == null ? IntPtr.Zero : opts.Handle, Gst.GLib.Marshaller.StringToPtrGStrdup (value));
+  gst_mixer_option_changed (Handle, opts == null ? IntPtr.Zero : opts.Handle, GLib.Marshaller.StringToPtrGStrdup (value));
 }
 
 [DllImport ("libgstinterfaces-0.10.dll", CallingConvention = CallingConvention.Cdecl) ]
@@ -68,7 +68,7 @@ static extern IntPtr gst_mixer_get_option (IntPtr raw, IntPtr opts);
 
 public string GetOption (Gst.Interfaces.MixerOptions opts) {
   IntPtr raw_ret = gst_mixer_get_option (Handle, opts == null ? IntPtr.Zero : opts.Handle);
-  string ret = Gst.GLib.Marshaller.Utf8PtrToString (raw_ret);
+  string ret = GLib.Marshaller.Utf8PtrToString (raw_ret);
   return ret;
 }
 
@@ -107,12 +107,12 @@ public int[] GetVolume (Gst.Interfaces.MixerTrack track) {
   if (track == null)
     return null;
 
-  IntPtr native_volumes = Gst.GLib.Marshaller.Malloc ( (ulong) (4 * track.NumChannels));
+  IntPtr native_volumes = GLib.Marshaller.Malloc ( (ulong) (4 * track.NumChannels));
   gst_mixer_get_volume (Handle, track.Handle, ref native_volumes);
 
   int[] volumes = new int[track.NumChannels];
   Marshal.Copy (native_volumes, volumes, 0, track.NumChannels);
-  Gst.GLib.Marshaller.Free (native_volumes);
+  GLib.Marshaller.Free (native_volumes);
   return volumes;
 }
 

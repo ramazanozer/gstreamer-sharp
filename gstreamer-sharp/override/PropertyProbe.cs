@@ -5,7 +5,7 @@ namespace Gst.Interfaces {
 
 	using System;
 
-	public partial interface PropertyProbe : Gst.GLib.IWrapper {
+	public partial interface PropertyProbe : GLib.IWrapper {
 		event Gst.Interfaces.ProbeNeededHandler ProbeNeeded;
 
 		string[] Properties { get; }
@@ -16,8 +16,8 @@ namespace Gst.Interfaces {
 		object[] ProbeAndGetValues (string property);
 	}
 
-	[Gst.GLib.GInterface (typeof (PropertyProbeAdapter))]
-	public partial interface PropertyProbeImplementor : Gst.GLib.IWrapper {
+	[GLib.GInterface (typeof (PropertyProbeAdapter))]
+	public partial interface PropertyProbeImplementor : GLib.IWrapper {
 		string[] Properties { get; }
 		bool NeedsProbe (string property);
 		void ProbeProperty (string property);

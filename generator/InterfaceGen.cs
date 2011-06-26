@@ -46,7 +46,7 @@ namespace GtkSharp.Generation {
 					break;
 				default:
 					if (!base.IsNodeNameHandled (node.Name))
-						Console.WriteLine ("Unexpected node " + node.Name + " in " + CName);
+						new LogWriter (QualifiedName).Warn ("Unexpected node " + node.Name);
 					break;
 				}
 			}
@@ -60,7 +60,7 @@ namespace GtkSharp.Generation {
 
 		public override string CallByName (string var, bool owned)
 		{
-			return String.Format ("{0} == null ? IntPtr.Zero : (({0} is Gst.GLib.Object) ? ({0} as Gst.GLib.Object).{1} : ({0} as {2}Adapter).{1})", var, owned ? "OwnedHandle" : "Handle", QualifiedName);
+			return String.Format ("{0} == null ? IntPtr.Zero : (({0} is GLib.Object) ? ({0} as GLib.Object).{1} : ({0} as {2}Adapter).{1})", var, owned ? "OwnedHandle" : "Handle", QualifiedName);
 		}
 
 		public override string FromNative (string var, bool owned)
@@ -70,19 +70,20 @@ namespace GtkSharp.Generation {
 
 		public override bool ValidateForSubclass ()
 		{
-			ArrayList invalids = new ArrayList ();
+			if (!base.ValidateForSubclass ())
+				return false;
 
+			LogWriter log = new LogWriter (QualifiedName);
+			ArrayList invalids = new ArrayList ();
 			foreach (Method method in methods.Values) {
-				if (!method.Validate ()) {
-					Console.WriteLine ("in type " + QualifiedName);
+				if (!method.Validate (log))
 					invalids.Add (method);
-				}
 			}
 			foreach (Method method in invalids)
 				methods.Remove (method.Name);
 			invalids.Clear ();
 
-			return base.ValidateForSubclass ();
+			return true;
 		}
 
 		void GenerateStaticCtor (StreamWriter sw)
@@ -91,9 +92,9 @@ namespace GtkSharp.Generation {
 			sw.WriteLine ();
 			sw.WriteLine ("\t\tstatic " + Name + "Adapter ()");
 			sw.WriteLine ("\t\t{");
-			sw.WriteLine ("\t\t\tGst.GLib.GType.Register (_gtype, typeof({0}Adapter));", Name);
+			sw.WriteLine ("\t\t\tGLib.GType.Register (_gtype, typeof({0}Adapter));", Name);
 			foreach (InterfaceVM vm in interface_vms) {
-				if (vm.IsValid)
+				if (vm.Validate (new LogWriter (QualifiedName)))
 					sw.WriteLine ("\t\t\tiface.{0} = new {0}NativeDelegate ({0}_cb);", vm.Name);
 			}
 			sw.WriteLine ("\t\t}");
@@ -127,22 +128,22 @@ namespace GtkSharp.Generation {
 		void GenerateCtors (StreamWriter sw)
 		{
 			// Native GObjects do not implement the *Implementor interfaces
-			sw.WriteLine ("\t\tGst.GLib.Object implementor;", Name);
+			sw.WriteLine ("\t\tGLib.Object implementor;", Name);
 			sw.WriteLine ();
 
 			if (!IsConsumeOnly) {
 				sw.WriteLine ("\t\tpublic " + Name + "Adapter ()");
 				sw.WriteLine ("\t\t{");
-				sw.WriteLine ("\t\t\tInitHandler = new Gst.GLib.GInterfaceInitHandler (Initialize);");
+				sw.WriteLine ("\t\t\tInitHandler = new GLib.GInterfaceInitHandler (Initialize);");
 				sw.WriteLine ("\t\t}");
 				sw.WriteLine ();
 				sw.WriteLine ("\t\tpublic {0}Adapter ({0}Implementor implementor)", Name);
 				sw.WriteLine ("\t\t{");
 				sw.WriteLine ("\t\t\tif (implementor == null)");
 				sw.WriteLine ("\t\t\t\tthrow new ArgumentNullException (\"implementor\");");
-				sw.WriteLine ("\t\t\telse if (!(implementor is Gst.GLib.Object))");
-				sw.WriteLine ("\t\t\t\tthrow new ArgumentException (\"implementor must be a subclass of Gst.GLib.Object\");");
-				sw.WriteLine ("\t\t\tthis.implementor = implementor as Gst.GLib.Object;");
+				sw.WriteLine ("\t\t\telse if (!(implementor is GLib.Object))");
+				sw.WriteLine ("\t\t\t\tthrow new ArgumentException (\"implementor must be a subclass of GLib.Object\");");
+				sw.WriteLine ("\t\t\tthis.implementor = implementor as GLib.Object;");
 				sw.WriteLine ("\t\t}");
 				sw.WriteLine ();
 			}
@@ -151,7 +152,7 @@ namespace GtkSharp.Generation {
 			sw.WriteLine ("\t\t{");
 			sw.WriteLine ("\t\t\tif (!_gtype.IsInstance (handle))");
 			sw.WriteLine ("\t\t\t\tthrow new ArgumentException (\"The gobject doesn't implement the GInterface of this adapter\", \"handle\");");
-			sw.WriteLine ("\t\t\timplementor = Gst.GLib.Object.GetObject (handle);");
+			sw.WriteLine ("\t\t\timplementor = GLib.Object.GetObject (handle);");
 			sw.WriteLine ("\t\t}");
 			sw.WriteLine ();
 		}
@@ -159,10 +160,12 @@ namespace GtkSharp.Generation {
 		void GenerateGType (StreamWriter sw)
 		{
 			Method m = GetMethod ("GetType");
+			if (m == null)
+				throw new Exception ("Interface " + QualifiedName + " missing GetType method.");
 			m.GenerateImport (sw);
-			sw.WriteLine ("\t\tprivate static Gst.GLib.GType _gtype = new Gst.GLib.GType ({0} ());", m.CName);
+			sw.WriteLine ("\t\tprivate static GLib.GType _gtype = new GLib.GType ({0} ());", m.CName);
 			sw.WriteLine ();
-			sw.WriteLine ("\t\tpublic override Gst.GLib.GType GType {");
+			sw.WriteLine ("\t\tpublic override GLib.GType GType {");
 			sw.WriteLine ("\t\t\tget {");
 			sw.WriteLine ("\t\t\t\treturn _gtype;");
 			sw.WriteLine ("\t\t\t}");
@@ -190,11 +193,11 @@ namespace GtkSharp.Generation {
 		{
 			sw.WriteLine ("\t\tpublic static " + Name + " GetObject (IntPtr handle, bool owned)");
 			sw.WriteLine ("\t\t{");
-			sw.WriteLine ("\t\t\tGst.GLib.Object obj = Gst.GLib.Object.GetObject (handle, owned);");
+			sw.WriteLine ("\t\t\tGLib.Object obj = GLib.Object.GetObject (handle, owned);");
 			sw.WriteLine ("\t\t\treturn GetObject (obj);");
 			sw.WriteLine ("\t\t}");
 			sw.WriteLine ();
-			sw.WriteLine ("\t\tpublic static " + Name + " GetObject (Gst.GLib.Object obj)");
+			sw.WriteLine ("\t\tpublic static " + Name + " GetObject (GLib.Object obj)");
 			sw.WriteLine ("\t\t{");
 			sw.WriteLine ("\t\t\tif (obj == null)");
 			sw.WriteLine ("\t\t\t\treturn null;");
@@ -230,7 +233,7 @@ namespace GtkSharp.Generation {
 			sw.WriteLine ("\tusing System.Runtime.InteropServices;");
 			sw.WriteLine ();
 			sw.WriteLine ("#region Autogenerated code");
-			sw.WriteLine ("\tpublic partial class " + Name + "Adapter : Gst.GLib.GInterfaceAdapter, " + QualifiedName + " {");
+			sw.WriteLine ("\tpublic partial class " + Name + "Adapter : GLib.GInterfaceAdapter, " + QualifiedName + " {");
 			sw.WriteLine ();
 
 			if (!IsConsumeOnly) {
@@ -249,7 +252,7 @@ namespace GtkSharp.Generation {
 			GenProperties (gen_info, null);
 
 			foreach (Signal sig in sigs.Values)
-				sig.GenEvent (sw, null, "Gst.GLib.Object.GetObject (Handle)");
+				sig.GenEvent (sw, null, "GLib.Object.GetObject (Handle)");
 
 			Method temp = methods ["GetType"] as Method;
 			if (temp != null)
@@ -270,14 +273,14 @@ namespace GtkSharp.Generation {
 
 		void GenerateImplementorIface (GenerationInfo gen_info)
 		{
-			StreamWriter sw = gen_info.Writer;
 			if (IsConsumeOnly)
 				return;
 
+			StreamWriter sw = gen_info.Writer;
 			sw.WriteLine ();
-			sw.WriteLine ("\t[Gst.GLib.GInterface (typeof (" + Name + "Adapter))]");
+			sw.WriteLine ("\t[GLib.GInterface (typeof (" + Name + "Adapter))]");
 			string access = IsInternal ? "internal" : "public";
-			sw.WriteLine ("\t" + access + " partial interface " + Name + "Implementor : Gst.GLib.IWrapper {");
+			sw.WriteLine ("\t" + access + " partial interface " + Name + "Implementor : GLib.IWrapper {");
 			sw.WriteLine ();
 			Hashtable vm_table = new Hashtable ();
 			foreach (InterfaceVM vm in interface_vms) {
@@ -286,7 +289,7 @@ namespace GtkSharp.Generation {
 			foreach (InterfaceVM vm in interface_vms) {
 				if (vm_table [vm.Name] == null)
 					continue;
-				else if (!vm.IsValid) {
+				else if (!vm.Validate (new LogWriter (QualifiedName))) {
 					vm_table.Remove (vm.Name);
 					continue;
 				} else if (vm.IsGetter || vm.IsSetter) {
@@ -323,7 +326,7 @@ namespace GtkSharp.Generation {
 			sw.WriteLine ();
 			sw.WriteLine ("#region Autogenerated code");
 			string access = IsInternal ? "internal" : "public";
-			sw.WriteLine ("\t" + access + " partial interface " + Name + " : Gst.GLib.IWrapper {");
+			sw.WriteLine ("\t" + access + " partial interface " + Name + " : GLib.IWrapper {");
 			sw.WriteLine ();
 			
 			foreach (Signal sig in sigs.Values) {

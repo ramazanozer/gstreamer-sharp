@@ -3,7 +3,7 @@ namespace Gst.Video {
   using System;
   using System.Runtime.InteropServices;
   using System.Reflection;
-  using Gst.GLib;
+  using GLib;
   using Gst;
   using Gst.Interfaces;
 

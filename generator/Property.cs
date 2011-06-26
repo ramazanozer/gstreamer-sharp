@@ -31,10 +31,11 @@ namespace GtkSharp.Generation {
 
 		public Property (XmlElement elem, ClassBase container_type) : base (elem, container_type) {}
 
-		public bool Validate ()
+		public bool Validate (LogWriter log)
 		{
 			if (CSType == "" && !Hidden) {
-				Console.Write("Property has unknown Type {0} ", CType);
+				log.Member = Name;
+				log.Warn ("property has unknown type '{0}' ", CType);
 				Statistics.ThrottledCount++;
 				return false;
 			}
@@ -64,7 +65,7 @@ namespace GtkSharp.Generation {
 		}
 
 		protected virtual string PropertyAttribute (string qpname) {
-			return "[Gst.GLib.Property (" + qpname + ")]";
+			return "[GLib.Property (" + qpname + ")]";
 		}
 
 		protected virtual string RawGetter (string qpname) {
@@ -117,9 +118,9 @@ namespace GtkSharp.Generation {
 
 			string v_type = "";
 			if (table.IsInterface (CType)) {
-				v_type = "(Gst.GLib.Object)";
+				v_type = "(GLib.Object)";
 			} else if (table.IsOpaque (CType)) {
-				v_type = "(Gst.GLib.Opaque)";
+				v_type = "(GLib.Opaque)";
 			} else if (table.IsEnum (CType)) {
 				v_type = "(Enum)";
 			}
@@ -140,12 +141,12 @@ namespace GtkSharp.Generation {
 				sw.WriteLine();
 			} else if (Readable) {
 				sw.WriteLine(indent + "get {");
-				sw.WriteLine(indent + "\tGst.GLib.Value val = " + RawGetter (qpname) + ";");
+				sw.WriteLine(indent + "\tGLib.Value val = " + RawGetter (qpname) + ";");
 				if (table.IsOpaque (CType) || table.IsBoxed (CType)) {
 					sw.WriteLine(indent + "\t" + CSType + " ret = (" + CSType + ") val;");
 				} else if (table.IsInterface (CType)) {
-					// Do we have to dispose the Gst.GLib.Object from the Gst.GLib.Value?
-					sw.WriteLine (indent + "\t{0} ret = {0}Adapter.GetObject ((Gst.GLib.Object) val);", CSType);
+					// Do we have to dispose the GLib.Object from the GLib.Value?
+					sw.WriteLine (indent + "\t{0} ret = {0}Adapter.GetObject ((GLib.Object) val);", CSType);
 				} else {
 					sw.Write(indent + "\t" + CSType + " ret = ");
 					sw.Write ("(" + CSType + ") ");
@@ -166,13 +167,13 @@ namespace GtkSharp.Generation {
 				sw.WriteLine();
 			} else if (Writable) {
 				sw.WriteLine(indent + "set {");
-				sw.Write(indent + "\tGst.GLib.Value val = ");
+				sw.Write(indent + "\tGLib.Value val = ");
 				if (table.IsBoxed (CType)) {
-					sw.WriteLine("(Gst.GLib.Value) value;");
+					sw.WriteLine("(GLib.Value) value;");
 				} else if (table.IsOpaque (CType)) {
-					sw.WriteLine("new Gst.GLib.Value(value, \"{0}\");", CType);
+					sw.WriteLine("new GLib.Value(value, \"{0}\");", CType);
 				} else {
-					sw.Write("new Gst.GLib.Value(");
+					sw.Write("new GLib.Value(");
 					if (v_type != "" && !(table.IsObject (CType) || table.IsInterface (CType) || table.IsOpaque (CType))) {
 						sw.Write(v_type + " ");
 					}

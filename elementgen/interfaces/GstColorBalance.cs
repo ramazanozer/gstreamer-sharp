@@ -1,12 +1,10 @@
 		[GLib.Signal("value-changed")]
 		event Gst.Interfaces.ValueChangedHandler Gst.Interfaces.ColorBalance.ValueChanged {
 			add {
-				GLib.Signal sig = GLib.Signal.Lookup (GLib.Object.GetObject (Handle), "value-changed", typeof (Gst.Interfaces.ValueChangedArgs));
-				sig.AddDelegate (value);
+				GLib.Object.GetObject (Handle).AddSignalHandler ("value-changed", value, typeof (Gst.Interfaces.ValueChangedArgs));
 			}
 			remove {
-				GLib.Signal sig = GLib.Signal.Lookup (GLib.Object.GetObject (Handle), "value-changed", typeof (Gst.Interfaces.ValueChangedArgs));
-				sig.RemoveDelegate (value);
+				GLib.Object.GetObject (Handle).RemoveSignalHandler ("value-changed", value);
 			}
 		}
 

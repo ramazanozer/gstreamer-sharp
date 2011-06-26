@@ -154,17 +154,17 @@ namespace GtkSharp.Generation {
 				sw.WriteLine ("\t\tpublic static " + Name + "Delegate " + Name + "Handler {");
 				sw.WriteLine ("\t\t\tset {");
 				sw.WriteLine ("\t\t\t\t{0}_handler = value;", CName);
-				sw.WriteLine ("\t\t\t\tOverride{0} ((Gst.GLib.GType) typeof ({1}), value == null ? null : {0}VMCallback);", Name, container_type.Name);
+				sw.WriteLine ("\t\t\t\tOverride{0} ((GLib.GType) typeof ({1}), value == null ? null : {0}VMCallback);", Name, container_type.Name);
 				sw.WriteLine ("\t\t\t}");
 				sw.WriteLine ("\t\t}");
 			} else {
-				sw.WriteLine ("\t\tstatic void Override{0} (Gst.GLib.GType gtype)", this.Name);
+				sw.WriteLine ("\t\tstatic void Override{0} (GLib.GType gtype)", this.Name);
 				sw.WriteLine ("\t\t{");
 				sw.WriteLine ("\t\t\tOverride{0} (gtype, {0}VMCallback);", this.Name);
 				sw.WriteLine ("\t\t}");
 			}
 			sw.WriteLine ();
-			sw.WriteLine ("\t\tstatic void Override{0} (Gst.GLib.GType gtype, {0}NativeDelegate callback)", this.Name);
+			sw.WriteLine ("\t\tstatic void Override{0} (GLib.GType gtype, {0}NativeDelegate callback)", this.Name);
 			sw.WriteLine ("\t\t{");
 		}
 
@@ -181,7 +181,7 @@ namespace GtkSharp.Generation {
 
 		protected void GenerateMethodBody (StreamWriter sw, ClassBase implementor)
 		{
-			sw.WriteLine ("\t\t[Gst.GLib.DefaultSignalHandler(Type=typeof(" + (implementor != null ? implementor.QualifiedName : container_type.QualifiedName) + "), ConnectionMethod=\"Override" + this.Name +"\")]");
+			sw.WriteLine ("\t\t[GLib.DefaultSignalHandler(Type=typeof(" + (implementor != null ? implementor.QualifiedName : container_type.QualifiedName) + "), ConnectionMethod=\"Override" + this.Name +"\")]");
 			sw.Write ("\t\t{0} ", this.Protection);
 			if (this.modifiers != "")
 				sw.Write ("{0} ", this.modifiers);
@@ -261,7 +261,7 @@ namespace GtkSharp.Generation {
 					return "FALSE";
 				case "true":
 					return "TRUE";
-				case "Gst.GLib.GType.None":
+				case "GLib.GType.None":
 					return "G_TYPE_NONE";
 				default:
 					return val;
@@ -342,26 +342,26 @@ namespace GtkSharp.Generation {
 			sw.WriteLine ();
 		}
 
-		public override bool Validate ()
+		public override bool Validate (LogWriter log)
 		{
-			if (!base.Validate ()) return false;
+			if (!base.Validate (log))
+				return false;
+
 			bool is_valid = true;
 
 			if (this.IsStatic) {
 				switch (OverrideType) {
 				case VMOverrideType.Unspecified:
-					Console.Write ("Static virtual methods can only be generated if you provide info on how to override this method via the metadata ");
+					log.Warn ("Static virtual methods can only be generated if you provide info on how to override this method via the metadata ");
 					is_valid = false;
 					break;
 				case VMOverrideType.ImplementingClass:
-					Console.Write ("Overriding static virtual methods in the implementing class is not supported yet ");
+					log.Warn ("Overriding static virtual methods in the implementing class is not supported yet ");
 					is_valid = false;
 					break;
 				}
 			}
 
-			if (!is_valid)
-				Console.WriteLine (" (in virtual method {0}.{1})", container_type.QualifiedName, this.Name);
 			return is_valid;
 		}
 	}

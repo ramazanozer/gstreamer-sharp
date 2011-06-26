@@ -37,17 +37,17 @@ namespace GtkSharp.Generation {
 		
 		public override string FromNative (string var)
 		{
-			return "Gst.GLib.Marshaller.Utf8PtrToString (" + var + ")";
+			return "GLib.Marshaller.Utf8PtrToString (" + var + ")";
 		}
 
 		public string AllocNative (string managed_var)
 		{
-			return "Gst.GLib.Marshaller.StringToPtrGStrdup (" + managed_var + ")";
+			return "GLib.Marshaller.StringToPtrGStrdup (" + managed_var + ")";
 		}
 
 		public string ReleaseNative (string native_var)
 		{
-			return "Gst.GLib.Marshaller.Free (" + native_var + ")";
+			return "GLib.Marshaller.Free (" + native_var + ")";
 		}
 	}
 }

@@ -1,12 +1,10 @@
 [GLib.Signal ("new-uri") ]
 event Gst.NewUriHandler Gst.URIHandler.NewUri {
   add {
-    GLib.Signal sig = GLib.Signal.Lookup (GLib.Object.GetObject (Handle), "new-uri", typeof (Gst.NewUriArgs));
-    sig.AddDelegate (value);
+    GLib.Object.GetObject (Handle).AddSignalHandler ("new-uri", value, typeof (Gst.NewUriArgs));
   }
   remove {
-    GLib.Signal sig = GLib.Signal.Lookup (GLib.Object.GetObject (Handle), "new-uri", typeof (Gst.NewUriArgs));
-    sig.RemoveDelegate (value);
+    GLib.Object.GetObject (Handle).RemoveSignalHandler ("new-uri", value);
   }
 }
 

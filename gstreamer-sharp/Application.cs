@@ -103,7 +103,7 @@ namespace Gst {
       }
     }
 
-    private static System.Type GstResolveType (Gst.GLib.GType gtype, string gtype_name) {
+    private static System.Type GstResolveType (GLib.GType gtype, string gtype_name) {
       // Make sure all currently loaded assemblies are in the TypeCache
       System.Array.ForEach((Assembly[]) AppDomain.CurrentDomain.GetAssemblies ().Clone (), Application.PutAssemblyTypesInCache);
 
@@ -117,25 +117,25 @@ namespace Gst {
     private static void RegisterManagedTypes() {
       // Load types in TypeCache to speed up later invocations of GstResolveType
       System.Array.ForEach((Assembly[]) AppDomain.CurrentDomain.GetAssemblies ().Clone (), Application.PutAssemblyTypesInCache);
-      Gst.GLib.GType.ResolveType += GstResolveType;
+      GLib.GType.ResolveType += GstResolveType;
 
-      Gst.GLib.GType.Register (Fraction.GType, typeof (Fraction));
-      Gst.GLib.GType.Register (IntRange.GType, typeof (IntRange));
-      Gst.GLib.GType.Register (DoubleRange.GType, typeof (DoubleRange));
-      Gst.GLib.GType.Register (FractionRange.GType, typeof (FractionRange));
-      Gst.GLib.GType.Register (Fourcc.GType, typeof (Fourcc));
-      Gst.GLib.GType.Register (Date.GType, typeof (Date));
-      Gst.GLib.GType.Register (List.GType, typeof (List));
-      Gst.GLib.GType.Register (Array.GType, typeof (Array));
-      Gst.GLib.GType.Register (Caps.GType, typeof (Caps));
-      Gst.GLib.GType.Register (Structure.GType, typeof (Structure));
-      Gst.GLib.GType.Register (TagList.GType, typeof (TagList));
-      Gst.GLib.GType.Register (MiniObject.GType, typeof (MiniObject));
-      Gst.GLib.GType.Register (Bus.GType, typeof (Bus));
-      Gst.GLib.GType.Register (Pad.GType, typeof (Pad));
-      Gst.GLib.GType.Register (GhostPad.GType, typeof (GhostPad));
-      Gst.GLib.GType.Register (Message.GType, typeof (Message));
-      Gst.GLib.GType.Register (SystemClock.GType, typeof (SystemClock));
+      GLib.GType.Register (Fraction.GType, typeof (Fraction));
+      GLib.GType.Register (IntRange.GType, typeof (IntRange));
+      GLib.GType.Register (DoubleRange.GType, typeof (DoubleRange));
+      GLib.GType.Register (FractionRange.GType, typeof (FractionRange));
+      GLib.GType.Register (Fourcc.GType, typeof (Fourcc));
+      GLib.GType.Register (Date.GType, typeof (Date));
+      GLib.GType.Register (List.GType, typeof (List));
+      GLib.GType.Register (Array.GType, typeof (Array));
+      GLib.GType.Register (Caps.GType, typeof (Caps));
+      GLib.GType.Register (Structure.GType, typeof (Structure));
+      GLib.GType.Register (TagList.GType, typeof (TagList));
+      GLib.GType.Register (MiniObject.GType, typeof (MiniObject));
+      GLib.GType.Register (Bus.GType, typeof (Bus));
+      GLib.GType.Register (Pad.GType, typeof (Pad));
+      GLib.GType.Register (GhostPad.GType, typeof (GhostPad));
+      GLib.GType.Register (Message.GType, typeof (Message));
+      GLib.GType.Register (SystemClock.GType, typeof (SystemClock));
 
       GtkSharp.GstreamerSharp.ObjectManager.Initialize ();
     }
@@ -146,7 +146,7 @@ namespace Gst {
       progargs[0] = progname;
       args.CopyTo (progargs, 1);
 
-      Gst.GLib.Argv argv = new Gst.GLib.Argv (progargs);
+      GLib.Argv argv = new GLib.Argv (progargs);
       IntPtr argv_ptr = argv.Handle;
       int argc = progargs.Length;
 
@@ -155,7 +155,7 @@ namespace Gst {
         bool result = gst_init_check (ref argc, ref argv_ptr, out error_ptr);
 
         if (error_ptr != IntPtr.Zero) {
-          throw new Gst.GLib.GException (error_ptr);
+          throw new GLib.GException (error_ptr);
         } else if (!result) {
           throw new ApplicationException ("gst_init_check() failed: Reason unknown");
         }

@@ -79,7 +79,7 @@ public class PipelineTest {
   }
 
   Element pipeline;
-  Gst.GLib.MainLoop loop;
+  GLib.MainLoop loop;
 
   bool MessageReceived (Bus bus, Message message) {
     MessageType type = message.Type;
@@ -134,7 +134,7 @@ public class PipelineTest {
     }
     Assert.AreEqual (pipeline.SetState (State.Playing), StateChangeReturn.Async);
 
-    loop = new Gst.GLib.MainLoop();
+    loop = new GLib.MainLoop();
     loop.Run();
 
     Assert.AreEqual (pipeline.SetState (State.Null), StateChangeReturn.Success);

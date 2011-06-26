@@ -9,7 +9,7 @@ public class TransformSample : Gst.Video.VideoFilter {
   private int width = 0, height = 0;
 
   static bool Register () {
-    Gst.GLib.GType gtype = (Gst.GLib.GType) typeof (TransformSample);
+    GLib.GType gtype = (GLib.GType) typeof (TransformSample);
     SetDetails (gtype, "Transform Sample", "Filter/Effect/Video",
                 "Draws a moving line on top of a video stream and handles mouse clicks",
                 "Sebastian Dröge <sebastian.droege@collabora.co.uk>");
@@ -94,7 +94,7 @@ public class TransformSample : Gst.Video.VideoFilter {
     pipeline.Add (videotestsrc, transform, ffmpegcolorspace, videosink);
     Element.Link (videotestsrc, transform, ffmpegcolorspace, videosink);
 
-    Gst.GLib.MainLoop loop = new Gst.GLib.MainLoop ();
+    GLib.MainLoop loop = new GLib.MainLoop ();
 
     pipeline.Bus.AddSignalWatch();
     pipeline.Bus.Message += delegate (object sender, MessageArgs margs) {

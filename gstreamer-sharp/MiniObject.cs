@@ -37,7 +37,7 @@ namespace Gst {
   using System.Reflection;
   using System.Runtime.InteropServices;
   using System.Text;
-  using Gst.GLib;
+  using GLib;
 
   public class MiniObject : IWrapper, IDisposable {
     [StructLayout (LayoutKind.Sequential) ]
@@ -146,7 +146,7 @@ namespace Gst {
       try {
         obj = Activator.CreateInstance (type, flags, null, new object[] {raw}, null) as Gst.MiniObject;
       } catch (MissingMethodException) {
-        throw new Gst.GLib.MissingIntPtrCtorException ("Gst.MiniObject subclass " + type + " must provide a protected or public IntPtr ctor to support wrapping of native object handles.");
+        throw new GLib.MissingIntPtrCtorException ("Gst.MiniObject subclass " + type + " must provide a protected or public IntPtr ctor to support wrapping of native object handles.");
       }
       return obj;
     }
@@ -208,7 +208,7 @@ namespace Gst {
 
     static Hashtable class_structs;
 
-    static GstMiniObjectClass GetClassStruct (Gst.GLib.GType gtype, bool use_cache) {
+    static GstMiniObjectClass GetClassStruct (GLib.GType gtype, bool use_cache) {
       if (class_structs == null)
         class_structs = new Hashtable ();
 
@@ -223,7 +223,7 @@ namespace Gst {
       }
     }
 
-    static void OverrideClassStruct (Gst.GLib.GType gtype, GstMiniObjectClass class_struct) {
+    static void OverrideClassStruct (GLib.GType gtype, GstMiniObjectClass class_struct) {
       IntPtr class_ptr = gtype.GetClassPtr ();
       Marshal.StructureToPtr (class_struct, class_ptr, false);
     }
@@ -285,16 +285,16 @@ namespace Gst {
     private static GType RegisterGType (System.Type t) {
       GType parent_gtype = LookupGType (t.BaseType);
       string name = BuildEscapedName (t);
-      IntPtr native_name = Gst.GLib.Marshaller.StringToPtrGStrdup (name);
+      IntPtr native_name = GLib.Marshaller.StringToPtrGStrdup (name);
       GTypeQuery query;
       g_type_query (parent_gtype.Val, out query);
       GTypeInfo info = new GTypeInfo ();
       info.class_size = (ushort) query.class_size;
       info.instance_size = (ushort) query.instance_size;
       GType gtype = new GType (g_type_register_static (parent_gtype.Val, native_name, ref info, 0));
-      Gst.GLib.Marshaller.Free (native_name);
+      GLib.Marshaller.Free (native_name);
 
-      Gst.GLib.GType.Register (gtype, t);
+      GLib.GType.Register (gtype, t);
 
       ConnectDefaultHandlers (gtype, t);
       InvokeClassInitializers (gtype, t);
@@ -305,7 +305,7 @@ namespace Gst {
       if (Handle != IntPtr.Zero) {
         GTypeInstance obj = (GTypeInstance) Marshal.PtrToStructure (Handle, typeof (GTypeInstance));
         GTypeClass klass = (GTypeClass) Marshal.PtrToStructure (obj.g_class, typeof (GTypeClass));
-        return new Gst.GLib.GType (klass.gtype);
+        return new GLib.GType (klass.gtype);
       } else {
         return LookupGType (GetType ());
       }
@@ -351,10 +351,10 @@ namespace Gst {
     [DllImport ("libgstreamer-0.10.dll") ]
     static extern IntPtr gst_mini_object_get_type();
 
-    public static Gst.GLib.GType GType {
+    public static GLib.GType GType {
       get {
         IntPtr raw_ret = gst_mini_object_get_type();
-        Gst.GLib.GType ret = new Gst.GLib.GType (raw_ret);
+        GLib.GType ret = new GLib.GType (raw_ret);
         return ret;
       }
     }
@@ -365,7 +365,7 @@ namespace Gst {
       }
     }
 
-    internal Gst.GLib.GType NativeType {
+    internal GLib.GType NativeType {
       get {
         return LookupGType ();
       }
@@ -423,24 +423,24 @@ namespace Gst {
     }
 
     [DllImport ("libgstreamer-0.10.dll") ]
-    private static extern IntPtr gst_value_dup_mini_object (ref Gst.GLib.Value v);
+    private static extern IntPtr gst_value_dup_mini_object (ref GLib.Value v);
 
-    public MiniObject (Gst.GLib.Value val) : base () {
+    public MiniObject (GLib.Value val) : base () {
       Raw = gst_value_dup_mini_object (ref val);
     }
 
     [DllImport ("libgstreamer-0.10.dll") ]
-    private static extern void gst_value_set_mini_object (ref Gst.GLib.Value v, IntPtr o);
+    private static extern void gst_value_set_mini_object (ref GLib.Value v, IntPtr o);
 
-    public static explicit operator Gst.GLib.Value (MiniObject o) {
-      Gst.GLib.Value val = new Gst.GLib.Value (o.LookupGType ());
+    public static explicit operator GLib.Value (MiniObject o) {
+      GLib.Value val = new GLib.Value (o.LookupGType ());
 
       gst_value_set_mini_object (ref val, o.Handle);
 
       return val;
     }
 
-    public void SetGValue (ref Gst.GLib.Value val) {
+    public void SetGValue (ref GLib.Value val) {
       gst_value_set_mini_object (ref val, Handle);
     }
 

@@ -61,7 +61,9 @@ namespace GtkSharp.Generation {
 		*/
 		public void GenerateCallback (StreamWriter sw, ClassBase implementor)
 		{
-			if (!Validate ())
+			LogWriter log = new LogWriter ();
+			log.Type = container_type.QualifiedName;
+			if (!Validate (log))
 				return;
 
 			string native_signature = "";
@@ -92,7 +94,7 @@ namespace GtkSharp.Generation {
 				else
 					type = this.container_type.Name;
 
-				sw.WriteLine ("\t\t\t\t{0} __obj = Gst.GLib.Object.GetObject (inst, false) as {0};", type);
+				sw.WriteLine ("\t\t\t\t{0} __obj = GLib.Object.GetObject (inst, false) as {0};", type);
 			}
 
 			sw.Write (call.Setup ("\t\t\t\t"));
@@ -108,7 +110,7 @@ namespace GtkSharp.Generation {
 
 			bool fatal = parms.HasOutParam || !retval.IsVoid;
 			sw.WriteLine ("\t\t\t} catch (Exception e) {");
-			sw.WriteLine ("\t\t\t\tGst.GLib.ExceptionManager.RaiseUnhandledException (e, " + (fatal ? "true" : "false") + ");");
+			sw.WriteLine ("\t\t\t\tGLib.ExceptionManager.RaiseUnhandledException (e, " + (fatal ? "true" : "false") + ");");
 			if (fatal) {
 				sw.WriteLine ("\t\t\t\t// NOTREACHED: above call does not return.");
 				sw.WriteLine ("\t\t\t\tthrow e;");
@@ -116,12 +118,6 @@ namespace GtkSharp.Generation {
 			sw.WriteLine ("\t\t\t}");
 			sw.WriteLine ("\t\t}");
 			sw.WriteLine ();
-		}
-
-		public bool IsValid {
-			get { 
-				return Validate ();
-			}
 		}
 
 		enum ValidState {
@@ -132,24 +128,20 @@ namespace GtkSharp.Generation {
 
 		ValidState vstate = ValidState.Unvalidated;
 
-		public override bool Validate ()
+		public override bool Validate (LogWriter log)
 		{
 			if (vstate != ValidState.Unvalidated)
 				return vstate == ValidState.Valid;
 
 			vstate = ValidState.Valid;
-			if (!parms.Validate () || !retval.Validate ()) {
+			log.Member = Name;
+			if (!parms.Validate (log) || !retval.Validate (log)) {
 				vstate = ValidState.Invalid;
+				return false;
 			}
 
-			if (vstate == ValidState.Invalid) {
-				Console.WriteLine ("(in virtual method " + container_type.QualifiedName + "." + Name + ")");
-				return false;
-			} else {
-				// The call string has to be created *after* the params have been validated since the Parameters class contains no elements before validation
-				call = new ManagedCallString (parms);
-				return true;
-			}
+			call = new ManagedCallString (parms);
+			return true;
 		}
 	}
 }

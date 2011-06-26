@@ -3,7 +3,7 @@ namespace Gst.PbUtils {
   using System;
   using System.Runtime.InteropServices;
   using System.Reflection;
-  using Gst.GLib;
+  using GLib;
   using Gst;
 
   public static class MissingPluginMessage {
@@ -35,9 +35,9 @@ namespace Gst.PbUtils {
     static extern IntPtr gst_missing_uri_sink_message_new (IntPtr src, IntPtr protocol);
 
     public static Gst.Message NewMissingUriSink (Gst.Object src, string protocol) {
-      IntPtr native_str = Gst.GLib.Marshaller.StringToPtrGStrdup (protocol);
+      IntPtr native_str = GLib.Marshaller.StringToPtrGStrdup (protocol);
       Message msg = (Message) Gst.MiniObject.GetObject (gst_missing_uri_sink_message_new (src.Handle, native_str), true);
-      Gst.GLib.Marshaller.Free (native_str);
+      GLib.Marshaller.Free (native_str);
       return msg;
     }
 
@@ -45,9 +45,9 @@ namespace Gst.PbUtils {
     static extern IntPtr gst_missing_uri_source_message_new (IntPtr src, IntPtr protocol);
 
     public static Gst.Message NewMissingUriSource (Gst.Object src, string protocol) {
-      IntPtr native_str = Gst.GLib.Marshaller.StringToPtrGStrdup (protocol);
+      IntPtr native_str = GLib.Marshaller.StringToPtrGStrdup (protocol);
       Message msg = (Message) Gst.MiniObject.GetObject (gst_missing_uri_source_message_new (src.Handle, native_str), true);
-      Gst.GLib.Marshaller.Free (native_str);
+      GLib.Marshaller.Free (native_str);
       return msg;
     }
 
@@ -55,9 +55,9 @@ namespace Gst.PbUtils {
     static extern IntPtr gst_missing_element_message_new (IntPtr src, IntPtr factory);
 
     public static Gst.Message NewMissingElement (Gst.Object src, string factory) {
-      IntPtr native_str = Gst.GLib.Marshaller.StringToPtrGStrdup (factory);
+      IntPtr native_str = GLib.Marshaller.StringToPtrGStrdup (factory);
       Message msg = (Message) Gst.MiniObject.GetObject (gst_missing_element_message_new (src.Handle, native_str), true);
-      Gst.GLib.Marshaller.Free (native_str);
+      GLib.Marshaller.Free (native_str);
       return msg;
     }
 
@@ -69,7 +69,7 @@ namespace Gst.PbUtils {
         throw new ApplicationException ();
 
       IntPtr raw_ret = gst_missing_plugin_message_get_description (msg.Handle);
-      string ret = Gst.GLib.Marshaller.PtrToStringGFree (raw_ret);
+      string ret = GLib.Marshaller.PtrToStringGFree (raw_ret);
       return ret;
     }
 
@@ -81,7 +81,7 @@ namespace Gst.PbUtils {
         throw new ApplicationException ();
 
       IntPtr raw_ret = gst_missing_plugin_message_get_installer_detail (msg.Handle);
-      string ret = Gst.GLib.Marshaller.PtrToStringGFree (raw_ret);
+      string ret = GLib.Marshaller.PtrToStringGFree (raw_ret);
       return ret;
     }
   }

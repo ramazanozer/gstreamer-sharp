@@ -124,9 +124,10 @@ namespace GtkSharp.Generation {
 			VirtualMethod vm;
 			if (is_signal_vm)
 				vm = new DefaultSignalHandler (vm_elem, this);
-			else if (is_interface)
-				vm = new InterfaceVM (vm_elem, methods [vm_elem.GetAttribute ("name")] as Method, this);
-			else
+			else if (is_interface) {
+				string target_name = vm_elem.HasAttribute ("target_method") ? vm_elem.GetAttribute ("target_method") : vm_elem.GetAttribute ("name");
+				vm = new InterfaceVM (vm_elem, methods [target_name] as Method, this);
+			} else
 				vm = new GObjectVM (vm_elem, this);
 
 			if (vm_elem.GetAttribute ("padding") == "true" || vm_elem.GetAttribute ("hidden") == "1")
@@ -164,7 +165,7 @@ namespace GtkSharp.Generation {
 
 		public override string FromNative (string var, bool owned)
 		{
-			return "Gst.GLib.Object.GetObject(" + var + (owned ? ", true" : "") + ") as " + QualifiedName;
+			return "GLib.Object.GetObject(" + var + (owned ? ", true" : "") + ") as " + QualifiedName;
 		}
 
 		public string ClassStructName {
@@ -260,13 +261,16 @@ namespace GtkSharp.Generation {
 
 		public override bool Validate ()
 		{
+
 			if (Parent != null && !(Parent as ObjectBase).ValidateForSubclass ())
 				return false;
+
+			LogWriter log = new LogWriter (QualifiedName);
 
 			ArrayList invalids = new ArrayList ();
 
 			foreach (GObjectVM vm in virtual_methods)
-				if (!vm.Validate ())
+				if (!vm.Validate (log))
 					invalids.Add (vm);
 
 			foreach (VirtualMethod invalid_vm in invalids) {
@@ -277,11 +281,11 @@ namespace GtkSharp.Generation {
 
 			class_fields_valid = true;
 			foreach (ClassField field in class_fields)
-				if (!field.Validate ())
+				if (!field.Validate (log))
 					class_fields_valid = false;
 			
 			foreach (InterfaceVM vm in interface_vms)
-				if (!vm.Validate ())
+				if (!vm.Validate (log))
 					invalids.Add (vm);
 
 			foreach (InterfaceVM invalid_vm in invalids) {
@@ -291,10 +295,8 @@ namespace GtkSharp.Generation {
 			invalids.Clear ();
 
 			foreach (Signal sig in sigs.Values) {
-				if (!sig.Validate ()) {
-					Console.WriteLine ("in type " + QualifiedName);
+				if (!sig.Validate (log))
 					invalids.Add (sig);
-				}
 			}
 			foreach (Signal sig in invalids)
 				sigs.Remove (sig.Name);
@@ -304,11 +306,11 @@ namespace GtkSharp.Generation {
 
 		public virtual bool ValidateForSubclass ()
 		{
+			LogWriter log = new LogWriter (QualifiedName);
 			ArrayList invalids = new ArrayList ();
 
 			foreach (Signal sig in sigs.Values) {
-				if (!sig.Validate ()) {
-					Console.WriteLine ("in type " + QualifiedName);
+				if (!sig.Validate (log)) {
 					invalids.Add (sig);
 				}
 			}
