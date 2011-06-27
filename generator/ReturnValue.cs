@@ -146,7 +146,7 @@ namespace GtkSharp.Generation {
 			} else if (IGen is IOwnable)
 				return ((IOwnable)IGen).FromNative (var, owned);
 			else if (is_null_term)
-				return String.Format ("GLib.Marshaller.NullTermPtrToStringArray ({0}, {1})", var, owned ? "true" : "false");
+				return String.Format ("Gst.Marshaller.NullTermPtrToStringArray ({0}, {1})", var, owned ? "true" : "false");
 			else if (is_array)
 				return String.Format ("({0}) GLib.Marshaller.ArrayPtrToArray ({1}, typeof ({2}), (int){3}native_{4}, true)", CSType, var, IGen.QualifiedName, CountParameter.CSType == "int" ? String.Empty : "(" + CountParameter.CSType + ")", CountParameter.Name);
 			else
@@ -162,7 +162,7 @@ namespace GtkSharp.Generation {
 				string args = ", typeof (" + ElementType + "), " + (owned ? "true" : "false") + ", " + (elements_owned ? "true" : "false");
 				var = "new " + IGen.QualifiedName + "(" + var + args + ")";
 			} else if (is_null_term)
-				return String.Format ("GLib.Marshaller.StringArrayToNullTermPointer ({0})", var);
+				return String.Format ("Gst.Marshaller.StringArrayToNullTermPointer ({0})", var);
 			else if (is_array)
 				return String.Format ("GLib.Marshaller.ArrayToArrayPtr ({0})", var);
 
