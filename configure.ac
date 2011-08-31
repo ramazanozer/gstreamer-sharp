@@ -124,7 +124,7 @@ AC_SUBST(GST_CFLAGS)
 
 # glib-sharp and gtk-sharp and mono-cairo are currently only needed for the samples
 PKG_CHECK_MODULES(GLIB_SHARP, glib-sharp-2.0 >= 2.12, have_glibsharp=yes, have_glibsharp=no)
-PKG_CHECK_MODULES(GTK_SHARP, gtk-sharp-2.0 >= 2.12, have_gtksharp=yes, have_gtksharp=no)
+PKG_CHECK_MODULES(GTK_SHARP, gtk-sharp-3.0 >= 2.99, have_gtksharp=yes, have_gtksharp=no)
 PKG_CHECK_MODULES(GTK_2_17_3, gtk+-2.0 >= 2.17.3, have_gtk_2_17_3=yes, have_gtk_2_17_3=no)
 if test "x$have_gtk_2_17_3" = "xyes"; then
     GTK_SHARP_LIBS="$GTK_SHARP_LIBS -define:HAVE_GTK_2_17_3"

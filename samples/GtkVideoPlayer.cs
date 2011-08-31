@@ -55,7 +55,7 @@ public class MainWindow : Gtk.Window {
     _da.ModifyBg (Gtk.StateType.Normal, new Gdk.Color (0, 0, 0));
     _da.SetSizeRequest (400, 300);
     _da.DoubleBuffered = false;
-    vBox.PackStart (_da);
+    vBox.PackStart (_da, true, true, 0);
 
     _scale = new HScale (0, 1, 0.01);
     _scale.DrawValue = false;
