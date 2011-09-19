@@ -115,8 +115,6 @@ namespace GtkSharp.Generation {
 							sw.WriteLine ("\t\t\t\tCreateNativeObject (new string [0], new GLib.Value[0]);");
 						sw.WriteLine ("\t\t\t\treturn;");
 					} else {
-						if (mini_object)
-							throw new Exception ("MiniObject subclasses can't have ctors with parameters");
 						ArrayList names = new ArrayList ();
 						ArrayList values = new ArrayList ();
 						for (int i = 0; i < Parameters.Count; i++) {
