@@ -66,8 +66,6 @@ namespace GtkSharp.Generation {
 
 		public override bool Validate ()
 		{
-			ArrayList invalids = new ArrayList ();
-
 			return base.Validate ();
 		}
 
