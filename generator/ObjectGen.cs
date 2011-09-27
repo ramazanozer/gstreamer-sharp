@@ -77,13 +77,13 @@ namespace GtkSharp.Generation {
 
 		public override bool Validate ()
 		{
+			LogWriter log = new LogWriter (QualifiedName);
+
 			ArrayList invalids = new ArrayList ();
 
 			foreach (ChildProperty prop in childprops.Values) {
-				if (!prop.Validate ()) {
-					Console.WriteLine ("in Object " + QualifiedName);
+				if (!prop.Validate (log))
 					invalids.Add (prop);
-				}
 			}
 			foreach (ChildProperty prop in invalids)
 				childprops.Remove (prop);
@@ -129,7 +129,7 @@ namespace GtkSharp.Generation {
 
 		public override void Generate (GenerationInfo gen_info)
 		{
-			gen_info.CurrentType = Name;
+			gen_info.CurrentType = QualifiedName;
 
 			string asm_name = gen_info.AssemblyName.Length == 0 ? NS.ToLower () + "-sharp" : gen_info.AssemblyName;
 			DirectoryInfo di = GetDirectoryInfo (gen_info.Dir, asm_name);
@@ -200,6 +200,12 @@ namespace GtkSharp.Generation {
 				foreach (string iface in interfaces) {
 					ClassBase igen = table.GetClassGen (iface);
 					foreach (Method m in igen.Methods.Values) {
+						if (m.Name.StartsWith ("Get") || m.Name.StartsWith ("Set")) {
+							if (GetProperty (m.Name.Substring (3)) != null) {
+								collisions[m.Name] = true;
+								continue;
+							}
+						}
 						Method collision = all_methods[m.Name] as Method;
 						if (collision != null && collision.Signature.Types == m.Signature.Types)
 							collisions[m.Name] = true;

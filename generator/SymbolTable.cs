@@ -84,12 +84,16 @@ namespace GtkSharp.Generation {
 			AddType (new SimpleGen ("ulong", "uint", "0"));
 			AddType (new SimpleGen ("gulong", "uint", "0"));
 			AddType (new SimpleGen ("unsigned long", "uint", "0"));
+			AddType (new SimpleGen ("gintptr", "int", "0"));
+			AddType (new SimpleGen ("guintptr", "uint", "0"));
 #else
 			AddType (new LPGen ("long"));
 			AddType (new LPGen ("glong"));
+			AddType (new LPGen ("gintptr"));
 			AddType (new LPUGen ("ulong"));
 			AddType (new LPUGen ("gulong"));
 			AddType (new LPUGen ("unsigned long"));
+			AddType (new LPUGen ("guintptr"));
 #endif
 
 			AddType (new LPGen ("ssize_t"));
@@ -120,6 +124,9 @@ namespace GtkSharp.Generation {
 			AddType (new ManualGen ("GList", "Gst.GLib.List"));
 			AddType (new ManualGen ("GPtrArray", "Gst.GLib.PtrArray"));
 			AddType (new ManualGen ("GSList", "Gst.GLib.SList"));
+			AddType (new ManualGen ("GVariant", "Gst.GLib.Variant"));
+			AddType (new ManualGen ("GVariantType", "Gst.GLib.VariantType"));
+			AddType (new ManualGen ("GValueArray", "Gst.GLib.ValueArray"));
 			AddType (new MarshalGen ("gunichar", "char", "uint", "Gst.GLib.Marshaller.CharToGUnichar ({0})", "Gst.GLib.Marshaller.GUnicharToChar ({0})"));
 			AddType (new MarshalGen ("time_t", "System.DateTime", "IntPtr", "Gst.GLib.Marshaller.DateTimeTotime_t ({0})", "Gst.GLib.Marshaller.time_tToDateTime ({0})"));
 			AddType (new MarshalGen ("GString", "string", "IntPtr", "new Gst.GLib.GString ({0}).Handle", "Gst.GLib.GString.PtrToString ({0})"));
@@ -308,7 +315,7 @@ namespace GtkSharp.Generation {
 		public bool IsObject(string c_type)
 		{
 			if ((this[c_type] is ObjectGen) ||
-			    (this[c_type] is MiniObjectGen))
+				(this[c_type] is MiniObjectGen))
 				return true;
 
 			return false;

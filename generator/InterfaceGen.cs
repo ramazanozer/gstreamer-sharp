@@ -46,7 +46,7 @@ namespace GtkSharp.Generation {
 					break;
 				default:
 					if (!base.IsNodeNameHandled (node.Name))
-						Console.WriteLine ("Unexpected node " + node.Name + " in " + CName);
+						new LogWriter (QualifiedName).Warn ("Unexpected node " + node.Name);
 					break;
 				}
 			}
@@ -70,19 +70,20 @@ namespace GtkSharp.Generation {
 
 		public override bool ValidateForSubclass ()
 		{
-			ArrayList invalids = new ArrayList ();
+			if (!base.ValidateForSubclass ())
+				return false;
 
+			LogWriter log = new LogWriter (QualifiedName);
+			ArrayList invalids = new ArrayList ();
 			foreach (Method method in methods.Values) {
-				if (!method.Validate ()) {
-					Console.WriteLine ("in type " + QualifiedName);
+				if (!method.Validate (log))
 					invalids.Add (method);
-				}
 			}
 			foreach (Method method in invalids)
 				methods.Remove (method.Name);
 			invalids.Clear ();
 
-			return base.ValidateForSubclass ();
+			return true;
 		}
 
 		void GenerateStaticCtor (StreamWriter sw)
@@ -93,7 +94,7 @@ namespace GtkSharp.Generation {
 			sw.WriteLine ("\t\t{");
 			sw.WriteLine ("\t\t\tGst.GLib.GType.Register (_gtype, typeof({0}Adapter));", Name);
 			foreach (InterfaceVM vm in interface_vms) {
-				if (vm.IsValid)
+				if (vm.Validate (new LogWriter (QualifiedName)))
 					sw.WriteLine ("\t\t\tiface.{0} = new {0}NativeDelegate ({0}_cb);", vm.Name);
 			}
 			sw.WriteLine ("\t\t}");
@@ -159,6 +160,8 @@ namespace GtkSharp.Generation {
 		void GenerateGType (StreamWriter sw)
 		{
 			Method m = GetMethod ("GetType");
+			if (m == null)
+				throw new Exception ("Interface " + QualifiedName + " missing GetType method.");
 			m.GenerateImport (sw);
 			sw.WriteLine ("\t\tprivate static Gst.GLib.GType _gtype = new Gst.GLib.GType ({0} ());", m.CName);
 			sw.WriteLine ();
@@ -270,10 +273,10 @@ namespace GtkSharp.Generation {
 
 		void GenerateImplementorIface (GenerationInfo gen_info)
 		{
-			StreamWriter sw = gen_info.Writer;
 			if (IsConsumeOnly)
 				return;
 
+			StreamWriter sw = gen_info.Writer;
 			sw.WriteLine ();
 			sw.WriteLine ("\t[Gst.GLib.GInterface (typeof (" + Name + "Adapter))]");
 			string access = IsInternal ? "internal" : "public";
@@ -286,7 +289,7 @@ namespace GtkSharp.Generation {
 			foreach (InterfaceVM vm in interface_vms) {
 				if (vm_table [vm.Name] == null)
 					continue;
-				else if (!vm.IsValid) {
+				else if (!vm.Validate (new LogWriter (QualifiedName))) {
 					vm_table.Remove (vm.Name);
 					continue;
 				} else if (vm.IsGetter || vm.IsSetter) {

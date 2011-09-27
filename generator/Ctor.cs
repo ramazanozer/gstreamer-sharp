@@ -94,9 +94,6 @@ namespace GtkSharp.Generation {
 
 		public void Generate (GenerationInfo gen_info)
 		{
-			if (!Validate ())
-				return;
-
 			StreamWriter sw = gen_info.Writer;
 			gen_info.CurrentMember = CName;
 
@@ -113,9 +110,9 @@ namespace GtkSharp.Generation {
 					
 					if (Parameters.Count == 0) {
 						if (mini_object)
-						  sw.WriteLine ("\t\t\t\tCreateNativeObject ();");
-						else
-						  sw.WriteLine ("\t\t\t\tCreateNativeObject (new string [0], new Gst.GLib.Value[0]);");
+							sw.WriteLine ("\t\t\t\tCreateNativeObject ();");
+						else 
+							sw.WriteLine ("\t\t\t\tCreateNativeObject (new string [0], new Gst.GLib.Value[0]);");
 						sw.WriteLine ("\t\t\t\treturn;");
 					} else {
 						if (mini_object)

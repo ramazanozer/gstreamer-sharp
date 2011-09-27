@@ -18,10 +18,13 @@ noinst_SCRIPTS = $(TARGETS) gapi_pp.pl gapi2xml.pl
 CLEANFILES = $(TARGETS) $(DEBUGS)
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = \
-	gst-gapi-fixup.cs \
-	gst-generate-tags.cs \
-	gapi-parser.cs \
-	gapi_pp.pl \
+sources = 			\
+	gst-gapi-fixup.cs	\
+	gst-generate-tags.cs	\
+	gapi-parser.cs
+ 
+EXTRA_DIST =		\
+	$(sources)	\
+	gapi_pp.pl	\
 	gapi2xml.pl
 

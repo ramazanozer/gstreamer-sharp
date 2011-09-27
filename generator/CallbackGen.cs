@@ -46,22 +46,18 @@ namespace GtkSharp.Generation {
 
 		public override bool Validate ()
 		{
-			if (!retval.Validate ()) {
-				Console.WriteLine ("rettype: " + retval.CType + " in callback " + CName);
-				Statistics.ThrottledCount++;
-				valid = false;
-				return false;
-			}
-
-			if (!parms.Validate ()) {
-				Console.WriteLine (" in callback " + CName);
-				Statistics.ThrottledCount++;
-				valid = false;
-				return false;
-			}
-
 			valid = true;
-			return true;
+			LogWriter log = new LogWriter ();
+			log.Type = QualifiedName;
+			if (!retval.Validate (log) || !parms.Validate (log)) {
+				Statistics.ThrottledCount++;
+				valid = false;
+			}
+
+			if (!String.IsNullOrEmpty (retval.CountParameterName))
+				retval.CountParameter = parms.GetCountParameter (retval.CountParameterName);
+
+			return valid;
 		}
 
 		public string InvokerName {
@@ -173,10 +169,10 @@ namespace GtkSharp.Generation {
 			if (retval.IsVoid)
 				sw.WriteLine ("\t\t\t" + call + ";");
 			else
-				sw.WriteLine ("\t\t\t" + retval.CSType + " result = " + retval.FromNative (call) + ";");
+				sw.WriteLine ("\t\t\t" + retval.CSType + " __result = " + retval.FromNative (call) + ";");
 			body.Finish (sw, String.Empty);
 			if (!retval.IsVoid)
-				sw.WriteLine ("\t\t\treturn result;");
+				sw.WriteLine ("\t\t\treturn __result;");
 			sw.WriteLine ("\t\t}");
 			sw.WriteLine ("\t}");
 			sw.WriteLine ();
@@ -225,6 +221,9 @@ namespace GtkSharp.Generation {
 			if (finish.Length > 0)
 				sw.WriteLine (finish);
 			sw.WriteLine ("\t\t\t\tif (release_on_call)\n\t\t\t\t\tgch.Free ();");
+			Parameter cnt = retval.CountParameter;
+			if (cnt != null)
+				sw.WriteLine ("\t\t\t\t{0} = {1}{2};", cnt.Name, cnt.CSType == "int" ? String.Empty : "(" + cnt.MarshalType + ")(" + cnt.CSType + ")", "__ret.Length");
 			if (retval.CSType != "void")
 				sw.WriteLine ("\t\t\t\treturn {0};", retval.ToNative ("__ret"));
 
@@ -281,7 +280,7 @@ namespace GtkSharp.Generation {
 		
 		public override void Generate (GenerationInfo gen_info)
 		{
-			gen_info.CurrentType = Name;
+			gen_info.CurrentType = QualifiedName;
 
 			sig = new Signature (parms);
 

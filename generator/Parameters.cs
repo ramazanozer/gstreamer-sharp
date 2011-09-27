@@ -91,8 +91,12 @@ namespace GtkSharp.Generation {
 			}
 		}
 
+		bool is_count;
+		bool is_count_set;
 		public bool IsCount {
 			get {
+				if (is_count_set)
+					return is_count;
 				
 				if (Name.StartsWith("n_"))
 					switch (CSType) {
@@ -109,6 +113,10 @@ namespace GtkSharp.Generation {
 				else
 					return false;
 			}
+			set {
+				is_count_set = true;
+				is_count = value;
+			}
 		}
 
 		public bool IsDestroyNotify {
@@ -119,7 +127,6 @@ namespace GtkSharp.Generation {
 
 		public bool IsLength {
 			get {
-				
 				if (Name.EndsWith("len") || Name.EndsWith("length"))
 					switch (CSType) {
 					case "int":
@@ -263,9 +270,9 @@ namespace GtkSharp.Generation {
 				} else if (gen is IManualMarshaler)
 					call_parm = "native_" + CallName;
 				else if (gen is ObjectBase)
-					call_parm = (gen as ObjectBase).CallByName(CallName, Owned);
+					call_parm = (gen as ObjectBase).CallByName (CallName, Owned);
 				else
-					call_parm = gen.CallByName(CallName);
+					call_parm = gen.CallByName (CallName);
 			
 				return call_parm;
 			}
@@ -283,8 +290,8 @@ namespace GtkSharp.Generation {
 						result [i] = (gen as IManualMarshaler).ReleaseNative ("native_" + CallName) + ";";
 					return result;
 				} else if (PassAs != String.Empty && MarshalType != CSType)
-					if (gen is HandleBase) 
-						return new string [] { CallName + " = " + (gen as HandleBase).FromNative ("native_" + CallName, Owned) + ";" };
+					if (gen is IOwnable) 
+						return new string [] { CallName + " = " + (gen as IOwnable).FromNative ("native_" + CallName, Owned) + ";" };
 					else
 						return new string [] { CallName + " = " + gen.FromNative ("native_" + CallName) + ";" };
 				return new string [0];
@@ -295,8 +302,8 @@ namespace GtkSharp.Generation {
 		{
 			if (Generatable == null)
 				return String.Empty;
-			else if (Generatable is HandleBase)
-				return ((HandleBase)Generatable).FromNative (var, Owned);
+			else if (Generatable is IOwnable)
+				return ((IOwnable)Generatable).FromNative (var, Owned);
 			else
 				return Generatable.FromNative (var);
 		}
@@ -529,9 +536,7 @@ namespace GtkSharp.Generation {
 		}
 
 		public int Count {
-			get {
-				return param_list.Count;
-			}
+			get { return param_list.Count; }
 		}
 
 		public int VisibleCount {
@@ -558,8 +563,7 @@ namespace GtkSharp.Generation {
 			if (idx > 0 && p.IsLength && p.PassAs == String.Empty && this [idx - 1].IsString)
 				return true;
 
-			if (p.IsCount && ((idx > 0 && this [idx - 1].IsArray) ||
-					  (idx < Count - 1 && this [idx + 1].IsArray)))
+			if (p.IsCount)
 				return true;
 
 			if (p.CType == "GError**")
@@ -608,6 +612,16 @@ namespace GtkSharp.Generation {
 			set { is_static = value; }
 		}
 
+		public Parameter GetCountParameter (string param_name)
+		{
+			foreach (Parameter p in this)
+				if (p.Name == param_name) {
+					p.IsCount = true;
+					return p;
+				}
+			return null;
+		}
+
 		void Clear ()
 		{
 			elem = null;
@@ -622,7 +636,7 @@ namespace GtkSharp.Generation {
 
 		bool valid = false;
 
-		public bool Validate ()
+		public bool Validate (LogWriter log)
 		{
 			if (valid)
 				return true;
@@ -637,14 +651,14 @@ namespace GtkSharp.Generation {
 				Parameter p = new Parameter (parm);
 				
 				if (p.IsEllipsis) {
-					Console.Write("Ellipsis parameter ");
+					log.Warn ("Ellipsis parameter: hide and bind manually if no alternative exists. ");
 					Clear ();
 					return false;
 				}
 
 				if ((p.CSType == "") || (p.Name == "") || 
 				    (p.MarshalType == "") || (SymbolTable.Table.CallByName(p.CType, p.Name) == "")) {
-					Console.Write ("Invalid parameter {0} of type {1}", p.Name, p.CType);
+					log.Warn ("Unknown type {1} on parameter {0}", p.Name, p.CType);
 					Clear ();
 					return false;
 				}
@@ -663,13 +677,16 @@ namespace GtkSharp.Generation {
 							} 
 						}
 					}
-				} else if (p.IsCount && i < elem.ChildNodes.Count - 1) {
-					XmlElement next = elem.ChildNodes [i + 1] as XmlElement;
-					if (next != null || next.Name == "parameter") {
-						Parameter a = new Parameter (next);
-						if (a.IsArray) {
-							p = new ArrayCountPair (next, parm, true);
-							i++;
+				} else if (p.IsCount) {
+					p.IsCount = false;
+					if (i < elem.ChildNodes.Count - 1) {
+						XmlElement next = elem.ChildNodes [i + 1] as XmlElement;
+						if (next != null || next.Name == "parameter") {
+							Parameter a = new Parameter (next);
+							if (a.IsArray) {
+								p = new ArrayCountPair (next, parm, true);
+								i++;
+							}
 						}
 					}
 				} else if (p.CType == "GError**")

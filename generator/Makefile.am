@@ -25,8 +25,10 @@ sources = 				\
 	IAccessor.cs			\
 	IGeneratable.cs			\
 	IManualMarshaler.cs		\
+	IOwnable.cs			\
 	InterfaceGen.cs			\
 	InterfaceVM.cs			\
+	LogWriter.cs			\
 	LPGen.cs			\
 	LPUGen.cs			\
 	ManagedCallString.cs		\
@@ -40,6 +42,7 @@ sources = 				\
 	ObjectBase.cs			\
 	ObjectGen.cs			\
 	OpaqueGen.cs			\
+	OwnableGen.cs			\
 	Parameters.cs			\
 	Parser.cs			\
 	Property.cs			\

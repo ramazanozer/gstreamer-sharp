@@ -60,20 +60,17 @@ namespace GtkSharp.Generation {
 			}
 		}
 
-		public bool Validate ()
+		public bool Validate (LogWriter log)
 		{
+			log.Member = Name;
 			if (Name == "") {
-				Console.Write ("Nameless signal ");
+				log.Warn ("Nameless signal found. Add name attribute with fixup.");
+				Statistics.ThrottledCount++;
+				return false;
+			} else if (!parms.Validate (log) || !retval.Validate (log)) {
 				Statistics.ThrottledCount++;
 				return false;
 			}
-			
-			if (!parms.Validate () || !retval.Validate ()) {
-				Console.Write (" in signal " + Name + " ");
-				Statistics.ThrottledCount++;
-				return false;
-			}
-
 			return true;
 		}
 
@@ -308,12 +305,10 @@ namespace GtkSharp.Generation {
 				sw.Write("new ");
 			sw.WriteLine("event " + EventHandlerQualifiedName + " " + Name + " {");
 			sw.WriteLine("\t\t\tadd {");
-			sw.WriteLine("\t\t\t\tGst.GLib.Signal sig = Gst.GLib.Signal.Lookup (" + target + ", " + CName + args_type + ");");
-			sw.WriteLine("\t\t\t\tsig.AddDelegate (value);");
+			sw.WriteLine("\t\t\t\t{0}.AddSignalHandler ({1}, value{2});", target, CName, args_type);
 			sw.WriteLine("\t\t\t}");
 			sw.WriteLine("\t\t\tremove {");
-			sw.WriteLine("\t\t\t\tGst.GLib.Signal sig = Gst.GLib.Signal.Lookup (" + target + ", " + CName + args_type + ");");
-			sw.WriteLine("\t\t\t\tsig.RemoveDelegate (value);");
+			sw.WriteLine("\t\t\t\t{0}.RemoveSignalHandler ({1}, value);", target, CName);
 			sw.WriteLine("\t\t\t}");
 			sw.WriteLine("\t\t}");
 			sw.WriteLine();
