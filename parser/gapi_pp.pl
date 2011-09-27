@@ -26,7 +26,7 @@
 
 $private_regex = '^#if.*(ENABLE_BACKEND|ENABLE_ENGINE)';
 $eatit_regex = '^#if(.*(__cplusplus|DEBUG|DISABLE_COMPAT|ENABLE_BROKEN)|\s+0\s*$)';
-$ignoreit_regex = '^\s+\*|#ident|#error|#\s*include|#\s*else|#\s*undef|G_(BEGIN|END)_DECLS|GDKVAR|GTKVAR|GTKMAIN_C_VAR|GTKTYPEUTILS_VAR|VARIABLE|GTKTYPEBUILTIN';
+$ignoreit_regex = '^\s+\*|#ident|#error|#\s*include|#\s*else|#\s*undef|G_(BEGIN|END)_DECLS|GDKVAR|GTKVAR|GTKMAIN_C_VAR|GTKTYPEUTILS_VAR|VARIABLE|GTKTYPEBUILTIN|G_GNUC_INTERNAL';
 
 foreach $arg (@ARGV) {
 	if (-d $arg && -e $arg) {
@@ -72,6 +72,8 @@ foreach $fname (@hdrs) {
 			$def = $line;
 			while ($def !~ /\".*\"/) {$def .= ($line = <INFILE>);}
 			print $def;
+		} elsif ($line =~ /#\s*define\s+\w+\s*\(\s*\w+_get_type\s*\(\)\)/) {
+			print $line;
 		} elsif ($line =~ /#\s*define\s+\w+\s*\D+/) {
 			$def = $line;
 			while ($line =~ /\\\n/) {$def .= ($line = <INFILE>);}
@@ -205,9 +207,9 @@ foreach $fname (@srcs, @privhdrs) {
 	}
 
 	while ($line = <INFILE>) {
-		next if ($line !~ /^(struct|\w+_class_init|\w+_base_init|\w+_get_type\b|G_DEFINE_TYPE_WITH_CODE)/);
+		next if ($line !~ /^(struct|typedef struct.*;|\w+_class_init|\w+_base_init|\w+_default_init|\w+_get_type\b|G_DEFINE_TYPE_EXTENDED|G_DEFINE_TYPE_WITH_CODE|G_DEFINE_BOXED_TYPE|G_DEFINE_INTERFACE)/);
 
-		if ($line =~ /^G_DEFINE_TYPE_WITH_CODE/) {
+		if ($line =~ /^G_DEFINE_(TYPE_EXTENDED|TYPE_WITH_CODE|BOXED_TYPE|INTERFACE)/) {
 			my $macro;
 			my $parens = 0;
 			do {
@@ -235,6 +237,9 @@ foreach $fname (@srcs, @privhdrs) {
 				print $line;
 				next;
 			}
+		} elsif ($line =~ /^typedef.*;/) {
+			print $line;
+			next;
 		}
 
 		$comment = 0;
