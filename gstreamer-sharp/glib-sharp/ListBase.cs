@@ -161,6 +161,8 @@ namespace Gst.GLib {
 					ret = data;
 				else if (element_type.IsSubclassOf (typeof (Gst.GLib.Object)))
 					ret = Gst.GLib.Object.GetObject (data, false);
+				else if (element_type.IsSubclassOf (typeof (Gst.MiniObject)))
+					ret = Gst.MiniObject.GetObject (data, false);
 				else if (element_type.IsSubclassOf (typeof (Gst.GLib.Opaque)))
 					ret = Gst.GLib.Opaque.GetOpaque (data, element_type, elements_owned);
 				else if (element_type == typeof (int))
@@ -192,6 +194,8 @@ namespace Gst.GLib {
 				for (uint i = 0; i < Count; i++)
 					if (typeof (Gst.GLib.Object).IsAssignableFrom (element_type))
 						g_object_unref (NthData (i));
+					else if (typeof (Gst.MiniObject).IsAssignableFrom (element_type))
+						Gst.MiniObject.GetObject (NthData (i), true).Dispose ();
 					else if (typeof (Gst.GLib.Opaque).IsAssignableFrom (element_type))
 						Gst.GLib.Opaque.GetOpaque (NthData (i), element_type, true).Dispose ();
 					else 
