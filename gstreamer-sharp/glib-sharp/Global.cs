@@ -1,8 +1,9 @@
 // Gst.GLib.Global.cs - Global glib properties and methods.
 //
-// Author: Andres G. Aragoneses <aaragoneses@novell.com>
+// Authors: Andres G. Aragoneses <aaragoneses@novell.com>
+//          Stephane Delcroix (stephane@delcroix.org)
 //
-// Copyright (c) 2008 Novell, Inc
+// Copyright (c) 2008 Novell, Inc.
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of version 2 of the Lesser GNU General 
@@ -31,6 +32,20 @@ namespace Gst.GLib {
 		//this is a static class
 		private Global () {}
 
+		internal static bool IsWindowsPlatform {
+			get {
+				switch (Environment.OSVersion.Platform) {
+				case PlatformID.Win32NT:
+				case PlatformID.Win32S:
+				case PlatformID.Win32Windows:
+				case PlatformID.WinCE:
+					return true;
+				default:
+					return false;
+				}
+			}
+		}
+
 		public static string ProgramName {
 			get {
 				return Gst.GLib.Marshaller.PtrToStringGFree(g_get_prgname());
@@ -50,12 +65,12 @@ namespace Gst.GLib {
 
 		public static string ApplicationName {
 			get {
-				return Gst.GLib.Marshaller.PtrToStringGFree(g_get_application_name());	
+				return Gst.GLib.Marshaller.PtrToStringGFree(g_get_application_name());
 			}
 			set {
 				IntPtr native_name = Gst.GLib.Marshaller.StringToPtrGStrdup (value);
 				g_set_application_name (native_name);
-				Gst.GLib.Marshaller.Free (native_name);				
+				Gst.GLib.Marshaller.Free (native_name);
 			}
 		}
 
@@ -64,5 +79,13 @@ namespace Gst.GLib {
 
 		[DllImport ("libglib-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr g_get_application_name ();
+
+		[DllImport ("libglib-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern IntPtr g_format_size_for_display (long size);
+		
+		static public string FormatSizeForDisplay (long size)
+		{
+			return Marshaller.PtrToStringGFree (g_format_size_for_display (size));
+		}
 	}
 }

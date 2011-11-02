@@ -30,38 +30,25 @@ namespace Gst.GLib {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct Value : IDisposable {
 
-		[StructLayout(LayoutKind.Explicit)]
-		struct Padding {
-			[FieldOffset (0)] int v_int;
-			[FieldOffset (0)] uint v_uint;
-			[FieldOffset (0)] int v_long;
-			[FieldOffset (0)] uint v_ulong;
-			[FieldOffset (0)] long v_int64;
-			[FieldOffset (0)] ulong v_uint64;
-			[FieldOffset (0)] float v_float;
-			[FieldOffset (0)] double v_double;
-			[FieldOffset (0)] IntPtr v_pointer;
-		}
-
 		IntPtr type;
-		Padding pad1;
-		Padding pad2;
+#pragma warning disable 0414
+		long pad1;
+		long pad2;
+#pragma warning restore 0414
 
 		public static Value Empty;
 
 		public Value (Gst.GLib.GType gtype)
 		{
 			type = IntPtr.Zero;
-			pad1 = new Padding ();
-			pad2 = new Padding ();
+			pad1 = pad2 = 0;
 			g_value_init (ref this, gtype.Val);
 		}
 
 		public Value (object obj)
 		{
 			type = IntPtr.Zero;
-			pad1 = new Padding ();
-			pad2 = new Padding ();
+			pad1 = pad2 = 0;
 
 			GType gtype = (GType) obj.GetType ();
 			g_value_init (ref this, gtype.Val);
@@ -108,19 +95,6 @@ namespace Gst.GLib {
 			g_value_set_uint64 (ref this, val);
 		}
 
-		[Obsolete ("Replaced by Value(object) constructor")]
-		public Value (EnumWrapper wrap, string type_name)
-		{
-			type = IntPtr.Zero;
-			pad1 = new Padding ();
-			pad2 = new Padding ();
-			g_value_init (ref this, GType.FromName (type_name).Val);
-			if (wrap.flags)
-				g_value_set_flags (ref this, (uint) (int) wrap); 
-			else
-				g_value_set_enum (ref this, (int) wrap); 
-		}
-
 		public Value (float val) : this (GType.Float)
 		{
 			g_value_set_float (ref this, val);
@@ -151,8 +125,7 @@ namespace Gst.GLib {
 		public Value (Opaque val, string type_name)
 		{
 			type = IntPtr.Zero;
-			pad1 = new Padding ();
-			pad2 = new Padding ();
+			pad1 = pad2 = 0;
 			g_value_init (ref this, GType.FromName (type_name).Val);
 			g_value_set_boxed (ref this, val.Handle);
 		}
@@ -170,30 +143,15 @@ namespace Gst.GLib {
 		public Value (Gst.GLib.Object obj, string prop_name)
 		{
 			type = IntPtr.Zero;
-			pad1 = new Padding ();
-			pad2 = new Padding ();
+			pad1 = pad2 = 0;
 			InitForProperty (obj, prop_name);
-		}
-
-		[Obsolete]
-		public Value (Gst.GLib.Object obj, string prop_name, EnumWrapper wrap)
-		{
-			type = IntPtr.Zero;
-			pad1 = new Padding ();
-			pad2 = new Padding ();
-			InitForProperty (obj.NativeType, prop_name);
-			if (wrap.flags)
-				g_value_set_flags (ref this, (uint) (int) wrap); 
-			else
-				g_value_set_enum (ref this, (int) wrap); 
 		}
 
 		[Obsolete]
 		public Value (IntPtr obj, string prop_name, Opaque val)
 		{
 			type = IntPtr.Zero;
-			pad1 = new Padding ();
-			pad2 = new Padding ();
+			pad1 = pad2 = 0;
 			InitForProperty (Gst.GLib.Object.GetObject (obj), prop_name);
 			g_value_set_boxed (ref this, val.Handle);
 		}
@@ -275,15 +233,6 @@ namespace Gst.GLib {
 				return g_value_get_uint64 (ref val);
 		}
 
-		[Obsolete ("Replaced by Enum cast")]
-		public static explicit operator EnumWrapper (Value val)
-		{
-			if (val.HoldsFlags)
-				return new EnumWrapper ((int)g_value_get_flags (ref val), true);
-			else
-				return new EnumWrapper (g_value_get_enum (ref val), false);
-		}
-
 		public static explicit operator Enum (Value val)
 		{
 			if (val.HoldsFlags)
@@ -323,20 +272,14 @@ namespace Gst.GLib {
 			return Gst.GLib.Opaque.GetOpaque (g_value_get_boxed (ref val), (Type) new GType (val.type), false);
 		}
 
-		public static explicit operator Gst.GLib.Boxed (Value val)
+		public static explicit operator Gst.GLib.VariantType (Value val)
 		{
-			return new Gst.GLib.Boxed (g_value_get_boxed (ref val));
+			return new VariantType (g_value_get_boxed (ref val));
 		}
 
 		public static explicit operator Gst.GLib.Object (Value val)
 		{
 			return Gst.GLib.Object.GetObject (g_value_get_object (ref val), false);
-		}
-
-		[Obsolete ("Replaced by Gst.GLib.Object cast")]
-		public static explicit operator Gst.GLib.UnwrappedObject (Value val)
-		{
-			return new UnwrappedObject (g_value_get_object (ref val));
 		}
 
 		public static explicit operator string[] (Value val)

@@ -2,7 +2,7 @@
 //
 // Author: Mike Kestner <mkestner@novell.com>
 //
-// Copyright <c> 2007 Novell, Inc.
+// Copyright <c> 2007, 2011 Novell, Inc.
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of version 2 of the Lesser GNU General 
@@ -19,19 +19,18 @@
 // Boston, MA 02111-1307, USA.
 
 
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+
 namespace Gst.GLib {
 
-	using System;
-	using System.Collections;
-	using System.Runtime.InteropServices;
-
-	internal class ToggleRef {
+	internal class ToggleRef : IDisposable {
 
 		bool hardened;
 		IntPtr handle;
 		object reference;
 		GCHandle gch;
-		Hashtable signals;
 
 		public ToggleRef (Gst.GLib.Object target)
 		{
@@ -42,29 +41,8 @@ namespace Gst.GLib {
 			g_object_unref (target.Handle);
 		}
 
-		public bool IsAlive {
-			get {
-				if (reference is WeakReference) {
-					WeakReference weak = reference as WeakReference;
-					return weak.IsAlive;
-				} else if (reference == null)
-					return false;
-				return true;
-			}
-		}
-
 		public IntPtr Handle {
-			get {
-				return handle;
-			}
-		}
-
-		public Hashtable Signals {
-			get {
-				if (signals == null)
-					signals = new Hashtable ();
-				return signals;
-			}
+			get { return handle; }
 		}
 
 		public Gst.GLib.Object Target {
@@ -79,12 +57,16 @@ namespace Gst.GLib {
 			}
 		}
 
-  		public void Free ()
+		public void Dispose ()
+		{
+			lock (PendingDestroys) {
+				PendingDestroys.Remove (this);
+			}
+			Free ();
+		}
+
+  		void Free ()
   		{
-			Signal[] signals = new Signal [Signals.Count];
-			Signals.Values.CopyTo (signals, 0);
-			foreach (Signal s in signals)
-				s.Free ();
 			if (hardened)
 				g_object_unref (handle);
 			else
@@ -115,8 +97,7 @@ namespace Gst.GLib {
 				reference = new WeakReference (reference);
 			else if (!is_last_ref && reference is WeakReference) {
 				WeakReference weak = reference as WeakReference;
-				if (weak.IsAlive)
-					reference = weak.Target;
+				reference = weak.Target;
 			}
 		}
 
@@ -141,6 +122,37 @@ namespace Gst.GLib {
 					toggle_notify_callback = new ToggleNotifyHandler (RefToggled);
 				return toggle_notify_callback;
 			}
+		}
+
+		static List<ToggleRef> PendingDestroys = new List<ToggleRef> ();
+		static bool idle_queued;
+
+		public void QueueUnref ()
+		{
+			lock (PendingDestroys) {
+				PendingDestroys.Add (this);
+				if (!idle_queued){
+					Timeout.Add (50, new TimeoutHandler (PerformQueuedUnrefs));
+					idle_queued = true;
+				}
+			}
+		}
+
+		static bool PerformQueuedUnrefs ()
+		{
+			ToggleRef[] references;
+
+			lock (PendingDestroys){
+				references = new ToggleRef [PendingDestroys.Count];
+				PendingDestroys.CopyTo (references, 0);
+				PendingDestroys.Clear ();
+				idle_queued = false;
+			}
+
+			foreach (ToggleRef r in references)
+				r.Free ();
+
+			return false;
 		}
 
 		[DllImport ("libgobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]

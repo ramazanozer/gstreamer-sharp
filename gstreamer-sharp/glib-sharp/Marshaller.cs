@@ -49,12 +49,21 @@ namespace Gst.GLib {
 		[DllImport ("libglib-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr g_filename_to_utf8 (IntPtr mem, int len, IntPtr read, out IntPtr written, out IntPtr error);
 
+		[DllImport("libglib-2.0-0.dll")]
+		static extern IntPtr g_filename_to_utf8_utf8 (IntPtr mem, int len, IntPtr read, out IntPtr written, out IntPtr error);
+
 		public static string FilenamePtrToString (IntPtr ptr) 
 		{
 			if (ptr == IntPtr.Zero) return null;
 			
 			IntPtr dummy, error;
-			IntPtr utf8 = g_filename_to_utf8 (ptr, -1, IntPtr.Zero, out dummy, out error);
+			IntPtr utf8;
+
+			if (Global.IsWindowsPlatform)
+				utf8 = g_filename_to_utf8_utf8 (ptr, -1, IntPtr.Zero, out dummy, out error);
+			else
+				utf8 = g_filename_to_utf8 (ptr, -1, IntPtr.Zero, out dummy, out error);
+
 			if (error != IntPtr.Zero)
 				throw new Gst.GLib.GException (error);
 			return Utf8PtrToString (utf8);
@@ -117,6 +126,9 @@ namespace Gst.GLib {
 		[DllImport ("libglib-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr g_filename_from_utf8 (IntPtr mem, int len, IntPtr read, out IntPtr written, out IntPtr error);
 
+		[DllImport("libglib-2.0-0.dll")]
+		static extern IntPtr g_filename_from_utf8_utf8 (IntPtr mem, int len, IntPtr read, out IntPtr written, out IntPtr error);
+
 		public static IntPtr StringToFilenamePtr (string str) 
 		{
 			if (str == null)
@@ -124,7 +136,14 @@ namespace Gst.GLib {
 
 			IntPtr dummy, error;
 			IntPtr utf8 = StringToPtrGStrdup (str);
-			IntPtr result = g_filename_from_utf8 (utf8, -1, IntPtr.Zero, out dummy, out error);
+
+			IntPtr result;
+
+			if (Global.IsWindowsPlatform)
+				result = g_filename_from_utf8_utf8 (utf8, -1, IntPtr.Zero, out dummy, out error);
+			else
+				result = g_filename_from_utf8 (utf8, -1, IntPtr.Zero, out dummy, out error);
+
 			g_free (utf8);
 			if (error != IntPtr.Zero)
 				throw new GException (error);
@@ -148,6 +167,14 @@ namespace Gst.GLib {
 				return ret;
 			else
 				return ret.Replace ("%", "%%");
+		}
+
+		internal static IntPtr StringArrayToStrvPtr (string[] strs)
+		{
+			IntPtr[] ptrs = StringArrayToNullTermPointer (strs);
+			IntPtr ret = g_malloc (new UIntPtr ((ulong) (ptrs.Length * IntPtr.Size)));
+			Marshal.Copy (ptrs, 0, ret, ptrs.Length);
+			return ret;
 		}
 
 		public static IntPtr[] StringArrayToNullTermPointer (string[] strs)
@@ -372,6 +399,28 @@ namespace Gst.GLib {
 		{
 			IntPtr result = Marshal.AllocHGlobal (Marshal.SizeOf (o));
 			Marshal.StructureToPtr (o, result, false);
+			return result;
+		}
+
+		public static IntPtr ArrayToArrayPtr (byte[] array)
+		{
+			IntPtr ret = Malloc ((ulong) array.Length);
+			Marshal.Copy (array, 0, ret, array.Length);
+			return ret;
+		}
+
+		public static Array ArrayPtrToArray (IntPtr array_ptr, Type element_type, int length, bool owned)
+		{
+			Array result = null;
+			if (element_type == typeof (byte)) {
+				byte[] ret = new byte [length];
+				Marshal.Copy (array_ptr, ret, 0, length);
+				result = ret;
+			} else {
+				throw new InvalidOperationException ("Marshaling of " + element_type + " arrays is not supported");
+			}
+			if (owned)
+				Free (array_ptr);
 			return result;
 		}
 

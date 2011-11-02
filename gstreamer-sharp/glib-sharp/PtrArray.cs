@@ -145,7 +145,7 @@ namespace Gst.GLib {
 		}
 
 		struct GPtrArray {
-			IntPtr pdata;
+			public IntPtr pdata;
 			public uint len;
 		}
 
