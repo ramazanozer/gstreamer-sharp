@@ -495,7 +495,7 @@ foreach $define (sort (keys (%defines))) {
 	if ($stocks{$ns}) {
 		$stock_el = $stocks{$ns};
 	} else {
-		$stock_el = addNameElem($ns_elem, "object", $ns . "Stock", $ns);
+		$stock_el = addNameElem($ns_elem, "object", $ns . "Stock", $ns_main);
 		$stocks{$ns} = $stock_el;
 	}
 	$string_el = addNameElem ($stock_el, "static-string", $define);
