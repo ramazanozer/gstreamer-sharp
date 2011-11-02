@@ -33,6 +33,7 @@ public static void MergeUseFirst (out Gst.GLib.Value dest, ref Gst.GLib.Value sr
 		 public const string AlbumArtistSortname = "album-artist-sortname";
 		 public const string Composer = "composer";
 		 public const string Date = "date";
+		 public const string DateTime = "datetime";
 		 public const string Genre = "genre";
 		 public const string Comment = "comment";
 		 public const string ExtendedComment = "extended-comment";
@@ -80,6 +81,13 @@ public static void MergeUseFirst (out Gst.GLib.Value dest, ref Gst.GLib.Value sr
 		 public const string GeoLocationLatitude = "geo-location-latitude";
 		 public const string GeoLocationLongitude = "geo-location-longitude";
 		 public const string GeoLocationElevation = "geo-location-elevation";
+		 public const string GeoLocationCountry = "geo-location-country";
+		 public const string GeoLocationCity = "geo-location-city";
+		 public const string GeoLocationSublocation = "geo-location-sublocation";
+		 public const string GeoLocationHorizontalError = "geo-location-horizontal-error";
+		 public const string GeoLocationMovementSpeed = "geo-location-movement-speed";
+		 public const string GeoLocationMovementDirection = "geo-location-movement-direction";
+		 public const string GeoLocationCaptureDirection = "geo-location-capture-direction";
 		 public const string ShowName = "show-name";
 		 public const string ShowSortname = "show-sortname";
 		 public const string ShowEpisodeNumber = "show-episode-number";
@@ -87,3 +95,9 @@ public static void MergeUseFirst (out Gst.GLib.Value dest, ref Gst.GLib.Value sr
 		 public const string Lyrics = "lyrics";
 		 public const string ComposerSortname = "composer-sortname";
 		 public const string Grouping = "grouping";
+		 public const string UserRating = "user-rating";
+		 public const string DeviceManufacturer = "device-manufacturer";
+		 public const string DeviceModel = "device-model";
+		 public const string ApplicationName = "application-name";
+		 public const string ApplicationData = "application-data";
+		 public const string ImageOrientation = "image-orientation";

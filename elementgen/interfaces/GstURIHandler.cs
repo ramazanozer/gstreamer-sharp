@@ -1,13 +1,11 @@
 [GLib.Signal ("new-uri") ]
 event Gst.NewUriHandler Gst.URIHandler.NewUri {
-  add {
-    GLib.Signal sig = GLib.Signal.Lookup (GLib.Object.GetObject (Handle), "new-uri", typeof (Gst.NewUriArgs));
-    sig.AddDelegate (value);
-  }
-  remove {
-    GLib.Signal sig = GLib.Signal.Lookup (GLib.Object.GetObject (Handle), "new-uri", typeof (Gst.NewUriArgs));
-    sig.RemoveDelegate (value);
-  }
+	add {
+		Gst.GLib.Object.GetObject (Handle).AddSignalHandler ("new-uri", value, typeof (Gst.NewUriArgs));
+	}
+	remove {
+		Gst.GLib.Object.GetObject (Handle).RemoveSignalHandler ("new-uri", value);
+	}
 }
 
 [DllImport ("libgstreamer-0.10.dll") ]

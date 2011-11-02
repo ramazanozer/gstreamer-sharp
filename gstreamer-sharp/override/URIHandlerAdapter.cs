@@ -209,12 +209,10 @@ namespace Gst {
 		[Gst.GLib.Signal("new-uri")]
 		public event Gst.NewUriHandler NewUri {
 			add {
-				Gst.GLib.Signal sig = Gst.GLib.Signal.Lookup (Gst.GLib.Object.GetObject (Handle), "new-uri", typeof (Gst.NewUriArgs));
-				sig.AddDelegate (value);
+				Gst.GLib.Object.GetObject (Handle).AddSignalHandler ("new-uri", value, typeof (Gst.NewUriArgs));
 			}
 			remove {
-				Gst.GLib.Signal sig = Gst.GLib.Signal.Lookup (Gst.GLib.Object.GetObject (Handle), "new-uri", typeof (Gst.NewUriArgs));
-				sig.RemoveDelegate (value);
+				Gst.GLib.Object.GetObject (Handle).RemoveSignalHandler ("new-uri", value);
 			}
 		}
 

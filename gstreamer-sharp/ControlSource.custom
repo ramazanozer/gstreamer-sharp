@@ -173,7 +173,6 @@ static extern bool gst__controllersharp_gst__controller_controlsource_base_bind 
 [DllImport ("gstreamersharpglue-0.10.dll") ]
 static extern void gst__controllersharp_gst__controller_controlsource_override_bind (IntPtr gtype, BindNativeDelegate cb);
 
-[Gst.GLib.CDeclCallback]
 delegate bool BindNativeDelegate (IntPtr handler, IntPtr pspec);
 
 static BindNativeDelegate Bind_cb_delegate;

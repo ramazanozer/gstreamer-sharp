@@ -1,12 +1,10 @@
 		[GLib.Signal("probe-needed")]
 		event Gst.Interfaces.ProbeNeededHandler Gst.Interfaces.PropertyProbe.ProbeNeeded {
 			add {
-				GLib.Signal sig = GLib.Signal.Lookup (GLib.Object.GetObject (Handle), "probe-needed", typeof (Gst.Interfaces.ProbeNeededArgs));
-				sig.AddDelegate (value);
+				Gst.GLib.Object.GetObject (Handle).AddSignalHandler ("probe-needed", value, typeof (Gst.Interfaces.ProbeNeededArgs));
 			}
 			remove {
-				GLib.Signal sig = GLib.Signal.Lookup (GLib.Object.GetObject (Handle), "probe-needed", typeof (Gst.Interfaces.ProbeNeededArgs));
-				sig.RemoveDelegate (value);
+				Gst.GLib.Object.GetObject (Handle).RemoveSignalHandler ("value-changed", value);
 			}
 		}
 

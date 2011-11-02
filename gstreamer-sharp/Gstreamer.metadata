@@ -15,6 +15,7 @@
   <attr path="/api/namespace/.//field[translate(@array_len,' ','')='GST_PADDING_LARGE']" name="array_len">20</attr>
   <attr path="/api/namespace/.//field[translate(@array_len,' ','')='GST_PADDING_LARGE-1']" name="array_len">19</attr>
   <attr path="/api/namespace/.//field[translate(@array_len,' ','')='GST_PADDING_LARGE-2']" name="array_len">18</attr>
+  <attr path="/api/namespace/.//field[translate(@array_len,' ','')='GST_PADDING_LARGE-3']" name="array_len">17</attr>
   <attr path="/api/namespace/.//field[translate(@array_len,' ','')='GST_PADDING_LARGE-4']" name="array_len">16</attr>
   <attr path="/api/namespace/.//field[translate(@array_len,' ','')='GST_PADDING_LARGE-5']" name="array_len">15</attr>
   <attr path="/api/namespace/.//field[translate(@array_len,' ','')='GST_PADDING_LARGE-6']" name="array_len">14</attr>
@@ -26,7 +27,7 @@
   <attr path="/api/namespace/object[@name='Bin']/method[@cname='gst_bin_add_many']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Bin']/method[@cname='gst_bin_remove_many']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Bin']/method[@cname='gst_bin_add']" name="hidden">1</attr> 
-  <attr path="/api/namespace/object[@name='Bin']/method[@cname='gst_bin_find_unconnected_pad']" name="hidden">1</attr> 
+  <remove-node path="/api/namespace/object[@name='Bin']/method[@cname='gst_bin_find_unconnected_pad']" />
   <attr path="/api/namespace/object[@name='Bin']/method[@cname='gst_bin_get_by_name']/return-type" name="owned">true</attr> 
   <attr path="/api/namespace/object[@name='Bin']/method[@cname='gst_bin_get_by_name_recurse_up']/return-type" name="owned">true</attr> 
   <attr path="/api/namespace/object[@name='Bin']/method[@cname='gst_bin_get_by_interface']/return-type" name="owned">true</attr> 
@@ -60,7 +61,7 @@
   <attr path="/api/namespace/mini-object[@name='Buffer']/field[@name='Size']" name="hidden">1</attr>
   <attr path="/api/namespace/mini-object[@name='Buffer']/method[@cname='gst_buffer_get_caps']" name="hidden">1</attr>
   <attr path="/api/namespace/mini-object[@name='Buffer']/method[@cname='gst_buffer_set_caps']" name="hidden">1</attr>
-  <attr path="/api/namespace/mini-object[@name='Buffer']/method[@cname='gst_buffer_stamp']" name="hidden">1</attr>
+  <remove-node path="/api/namespace/mini-object[@name='Buffer']/method[@cname='gst_buffer_stamp']" />
   <attr path="/api/namespace/mini-object[@name='Buffer']/method[@cname='gst_buffer_join']" name="hidden">1</attr>
   <attr path="/api/namespace/mini-object[@name='Buffer']/method[@cname='gst_buffer_make_metadata_writable']" name="hidden">1</attr>
   <attr path="/api/namespace/mini-object[@name='Buffer']/constructor[@cname='gst_buffer_new_and_alloc']" name="hidden">1</attr>
@@ -118,6 +119,8 @@
   <attr path="/api/namespace/boxed[@name='Caps']/method[@cname='gst_caps_copy_nth']/return-type" name="owned">true</attr>
   <attr path="/api/namespace/boxed[@name='Caps']/method[@cname='gst_caps_replace']" name="hidden">1</attr>
   <attr path="/api/namespace/boxed[@name='Caps']/method[@cname='gst_caps_make_writable']" name="hidden">1</attr>
+  <remove-node path="/api/namespace/boxed[@name='Caps']/method[@cname='gst_caps_load_thyself']" />
+  <remove-node path="/api/namespace/boxed[@name='Caps']/method[@cname='gst_caps_save_thyself']" />
   <attr path="/api/namespace/boxed[@name='Caps']/method[@cname='gst_caps_truncate']" name="hidden">1</attr>
   <attr path="/api/namespace/boxed[@name='Caps']/method[@cname='gst_caps_do_simplify']" name="hidden">1</attr>
   <attr path="/api/namespace/boxed[@name='Caps']/method[@cname='gst_caps_set_simple_valist']" name="hidden">1</attr>
@@ -210,6 +213,8 @@
   <move-node path="/api/namespace/object[@name='Clock']/method[@cname='gst_clock_id_unschedule']">/api/namespace/struct[@name='ClockEntry']</move-node>
   <move-node path="/api/namespace/object[@name='Clock']/method[@cname='gst_clock_id_wait']">/api/namespace/struct[@name='ClockEntry']</move-node>
   <move-node path="/api/namespace/object[@name='Clock']/method[@cname='gst_clock_id_wait_async']">/api/namespace/struct[@name='ClockEntry']</move-node>
+  <move-node path="/api/namespace/object[@name='Clock']/method[@cname='gst_clock_id_wait_async_full']">/api/namespace/struct[@name='ClockEntry']</move-node>
+  <move-node path="/api/namespace/object[@name='Clock']/method[@cname='gst_clock_single_shot_id_reinit']">/api/namespace/struct[@name='ClockEntry']</move-node>
   <remove-node path="/api/namespace/object[@name='Clock']/constructor[@cname='gst_clock_new_periodic_id']" />
   <remove-node path="/api/namespace/object[@name='Clock']/constructor[@cname='gst_clock_new_single_shot_id']" />
   <add-node path="/api/namespace/object[@name='Clock']">
@@ -259,6 +264,11 @@
   <attr path="/api/namespace/struct[@name='ClockEntry']/method[@cname='gst_clock_id_wait_async']" name="name">WaitAsync</attr>
   <remove-attr path="/api/namespace/struct[@name='ClockEntry']/method[@cname='gst_clock_id_wait_async']" name="shared"/>
   <remove-node path="/api/namespace/struct[@name='ClockEntry']/method[@cname='gst_clock_id_wait_async']/*/parameter[@name='id']" />
+  <attr path="/api/namespace/struct[@name='ClockEntry']/method[@cname='gst_clock_id_wait_async_full']" name="name">WaitAsyncFull</attr>
+  <remove-attr path="/api/namespace/struct[@name='ClockEntry']/method[@cname='gst_clock_id_wait_async_full']" name="shared"/>
+  <remove-node path="/api/namespace/struct[@name='ClockEntry']/method[@cname='gst_clock_id_wait_async_full']/*/parameter[@name='id']" />
+  <attr path="/api/namespace/struct[@name='ClockEntry']/method[@cname='gst_clock_single_shot_id_reinit']" name="name">SingleShotReinit</attr>
+  <remove-node path="/api/namespace/struct[@name='ClockEntry']/method[@cname='gst_clock_single_shot_id_reinit']/*/parameter[@name='id']" />
 
   <attr path="/api/namespace/callback[@name='ClockCallback']/parameters/parameter[@type='GstClockID']" name="type">GstClockEntry*</attr>
 
@@ -272,8 +282,6 @@
   <attr path="/api/namespace/enum[@name='ClockFlags']/member[@cname='GST_CLOCK_FLAG_CAN_SET_MASTER']" name="value">MiniObjectFlags.Last &lt;&lt; 5</attr>
   <attr path="/api/namespace/enum[@name='ClockFlags']/member[@cname='GST_CLOCK_FLAG_LAST']" name="value">MiniObjectFlags.Last &lt;&lt; 8</attr>
 
-  <attr path="/api/namespace/class[@name='Debug']" name="hidden">1</attr>
-
   <attr path="/api/namespace/object[@name='Element']/field" name="hidden">1</attr>
   <remove-attr path="/api/namespace/object[@name='Element']/field[@name='CurrentState']" name="hidden" />
   <attr path="/api/namespace/object[@name='Element']/virtual_method[@cname='get_index']/return-type" name="owned">true</attr>
@@ -281,7 +289,8 @@
   <attr path="/api/namespace/object[@name='Element']/method[@cname='gst_element_link_many']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Element']/method[@cname='gst_element_unlink_many']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Element']/method[@cname='gst_element_add_pad']" name="hidden">1</attr>
-  <attr path="/api/namespace/object[@name='Element']/method[@cname='gst_element_get_pad']" name="hidden">1</attr>
+  <remove-node path="/api/namespace/object[@name='Element']/method[@cname='gst_element_class_set_details']" />
+  <remove-node path="/api/namespace/object[@name='Element']/method[@cname='gst_element_get_pad']" />
   <attr path="/api/namespace/object[@name='Element']/signal[@name='NoMorePads']" name="name">HasNoMorePads</attr>
   <attr path="/api/namespace/object[@name='Element']/method[@name='ContinueState']/parameters/*[@name='ret']" name="name">state_change_ret</attr>
   <attr path="/api/namespace/object[@name='Element']/method[@cname='gst_element_query_position']/parameters/parameter[@name='format']" name="pass_as">ref</attr>
@@ -328,11 +337,14 @@
   <attr path="/api/namespace/object[@name='ElementFactory']/method[@cname='gst_element_factory_get_static_pad_templates']/return-type" name="elements_owned">false</attr>
   <attr path="/api/namespace/object[@name='ElementFactory']/method[@cname='gst_element_factory_get_static_pad_templates']/return-type" name="owned">false</attr>
   <attr path="/api/namespace/object[@name='ElementFactory']/method[@cname='gst_element_factory_get_uri_type']/return-type" name="type">GstURIType</attr>
-
+  <attr path="/api/namespace/object[@name='ElementFactory']/method[@cname='gst_element_factory_list_get_elements']/return-type" name="element_type">GstElementFactory</attr>
+  <attr path="/api/namespace/object[@name='ElementFactory']/method[@cname='gst_element_factory_list_filter']/return-type" name="element_type">GstElementFactory</attr>
+  
   <attr path="/api/namespace/enum[@name='ElementFlags']/member[@cname='GST_ELEMENT_FLAG_LAST']" name="name">Last</attr>
   <attr path="/api/namespace/enum[@name='ElementFlags']/member[@cname='GST_ELEMENT_LOCKED_STATE']" name="value">ObjectFlags.Last &lt;&lt; 0</attr>
   <attr path="/api/namespace/enum[@name='ElementFlags']/member[@cname='GST_ELEMENT_IS_SINK']" name="value">ObjectFlags.Last &lt;&lt; 1</attr>
   <attr path="/api/namespace/enum[@name='ElementFlags']/member[@cname='GST_ELEMENT_UNPARENTING']" name="value">ObjectFlags.Last &lt;&lt; 2</attr>
+  <attr path="/api/namespace/enum[@name='ElementFlags']/member[@cname='GST_ELEMENT_IS_SOURCE']" name="value">ObjectFlags.Last &lt;&lt; 3</attr>
   <attr path="/api/namespace/enum[@name='ElementFlags']/member[@cname='GST_ELEMENT_FLAG_LAST']" name="value">ObjectFlags.Last &lt;&lt; 16</attr>
 
   <change-node-type path="/api/namespace/object[@name='Event']">mini-object</change-node-type>
@@ -421,13 +433,13 @@
   <remove-node path="/api/namespace/class[@name='Global']/method[@cname='gst_default_registry_check_feature_version']" />
   <move-node path="/api/namespace/class[@name='Global']/method[@cname='gst_update_registry']">/api/namespace/object[@name='Registry']</move-node>
   <remove-node path="/api/namespace/class[@name='Global']/method[@cname='gst_atomic_int_set']" />
+  <remove-node path="/api/namespace/class[@name='Global']/method[@cname='gst_class_signal_emit_by_name']" />
   <move-node path="/api/namespace/class[@name='Global']/method[@cname='gst_format_get_by_nick']">/api/namespace/class[@name='Util']</move-node>
   <move-node path="/api/namespace/class[@name='Global']/method[@cname='gst_format_get_details']">/api/namespace/class[@name='Util']</move-node>
   <move-node path="/api/namespace/class[@name='Global']/method[@cname='gst_format_get_name']">/api/namespace/class[@name='Util']</move-node>
   <move-node path="/api/namespace/class[@name='Global']/method[@cname='gst_format_register']">/api/namespace/class[@name='Util']</move-node>
   <move-node path="/api/namespace/class[@name='Global']/method[@cname='gst_formats_contains']">/api/namespace/class[@name='Util']</move-node>
   <remove-node path="/api/namespace/class[@name='Global']/method[@cname='gst_format_to_quark']" />
-  <remove-node path="/api/namespace/class[@name='Global']/method[@cname='gst_is_tag_list']" />
   <add-node path="/api/namespace[@name='Gst']"><class name="Parse" cname="GstParse" disable_void_ctor="1"></class></add-node>
   <move-node path="/api/namespace/class[@name='Global']/method[@cname='gst_parse_launch']">/api/namespace/class[@name='Parse']</move-node>
   <move-node path="/api/namespace/class[@name='Global']/method[@cname='gst_parse_launch_full']">/api/namespace/class[@name='Parse']</move-node>
@@ -488,7 +500,6 @@
   
   <attr path="/api/namespace/callback[@name='IndexResolver']/parameters/parameter[@name='writer_string']" name="pass_as">out</attr>
 
-  <attr path="/api/namespace/class[@name='Iterator']" name="hidden">1</attr>
   <add-node path="/api/namespace[@name='Gst']">
 		<struct name="Iterator" cname="GstIterator" opaque="true">
 			<implements><interface name="IEnumerable" /></implements>
@@ -528,10 +539,14 @@
   <attr path="/api/namespace/object[@name='Object']/method[@cname='gst_object_default_error']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Object']/method[@cname='gst_object_default_deep_notify']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Object']/method[@cname='gst_object_set_name']" name="hidden">1</attr>
+  <remove-node path="/api/namespace/object[@name='Object']/method[@cname='gst_object_set_name_prefix']" />
   <attr path="/api/namespace/object[@name='Object']/method[@cname='gst_object_get_name']" name="hidden">1</attr>
+  <remove-node path="/api/namespace/object[@name='Object']/method[@cname='gst_object_get_name_prefix']" />
   <attr path="/api/namespace/object[@name='Object']/method[@cname='gst_object_ref']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Object']/method[@cname='gst_object_unref']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Object']/method[@cname='gst_object_replace']" name="hidden">1</attr>
+  <remove-node path="/api/namespace/object[@name='Object']/method[@cname='gst_object_restore_thyself']" />
+  <remove-node path="/api/namespace/object[@name='Object']/method[@cname='gst_object_save_thyself']" />
   <attr path="/api/namespace/object[@name='Object']/method[@cname='gst_object_sink']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Object']/method[@cname='gst_object_set_parent']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Object']/method[@cname='gst_object_get_parent']" name="hidden">1</attr>
@@ -602,28 +617,19 @@
   <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_set_activatepush_function']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_set_query_function']" name="hidden">1</attr>
   <!-- deprecated -->
-  <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_set_internal_link_function']" name="hidden">1</attr>
-  <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_get_internal_links']" name="hidden">1</attr>
-  <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_get_internal_links_default']" name="hidden">1</attr>
+  <remove-node path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_set_internal_link_function']" />
+  <remove-node path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_get_internal_links']" />
+  <remove-node path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_get_internal_links_default']" />
+  <remove-node path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_load_and_link']" />
   <attr path="/api/namespace/callback[@name='PadIntLinkFunction']" name="hidden">1</attr>
   <!-- IntPtr is not nice to use -->
   <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_set_element_private']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_get_element_private']" name="hidden">1</attr>
   <!-- FIXME: This is not parsed for some reason -->
   <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_set_query_type_function']" name="hidden">1</attr>
-  <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_get_query_types']" name="hidden">1</attr>
-  <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_get_query_types_default']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_set_iterate_internal_links_function']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_iterate_internal_links_default']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_iterate_internal_links']" name="name">GetInternalLinks</attr>
-  <add-node path="/api/namespace[@name='Gst']">
-    <callback name="PadQueryTypeFunction" cname="GstPadQueryTypeFunction" hidden="1">
-      <return-type type="const-GstQueryType*" />
-      <parameters>
-        <parameter type="GstPad*" name="pad" />
-      </parameters>
-    </callback>
-  </add-node>
 
   <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_chain']/parameters/parameter[@name='buffer']" name="owned">true</attr>
   <attr path="/api/namespace/object[@name='Pad']/method[@cname='gst_pad_chain_list']/parameters/parameter[@name='list']" name="owned">true</attr>
@@ -733,8 +739,8 @@
 
   <attr path="/api/namespace/object[@name='Pipeline']/method[@cname='gst_pipeline_get_bus']/return-type" name="owned">true</attr>
   <attr path="/api/namespace/object[@name='Pipeline']/method[@cname='gst_pipeline_get_clock']/return-type" name="owned">true</attr>
-  <attr path="/api/namespace/object[@name='Pipeline']/method[@cname='gst_pipeline_get_last_stream_time']" name="hidden">1</attr>
-  <attr path="/api/namespace/object[@name='Pipeline']/method[@cname='gst_pipeline_set_new_stream_time']" name="hidden">1</attr>
+  <remove-node path="/api/namespace/object[@name='Pipeline']/method[@cname='gst_pipeline_get_last_stream_time']" />
+  <remove-node path="/api/namespace/object[@name='Pipeline']/method[@cname='gst_pipeline_set_new_stream_time']" />
 
   <attr path="/api/namespace/enum[@name='PipelineFlags']/member[@cname='GST_PIPELINE_FLAG_FIXED_CLOCK']" name="value">BinFlags.Last &lt;&lt; 0</attr>
   <attr path="/api/namespace/enum[@name='PipelineFlags']/member[@cname='GST_PIPELINE_FLAG_LAST']" name="value">BinFlags.Last &lt;&lt; 4</attr>
@@ -1052,7 +1058,8 @@
   <attr path="/api/namespace/object[@cname='GstAdapter']/method[@cname='gst_adapter_take']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@cname='GstAdapter']/method[@cname='gst_adapter_take_buffer']" name="name">Take</attr>
   <attr path="/api/namespace/object[@cname='GstAdapter']/method[@cname='gst_adapter_take_buffer']/return-type" name="owned">true</attr>
-
+  <attr path="/api/namespace/object[@cname='GstAdapter']/method[@cname='gst_adapter_take_list']/return-type" name="element_type">GstBuffer</attr>
+  
   <attr path="/api/namespace/object[@cname='GstBaseSink']/virtual_method[@cname='get_caps']/return-type" name="owned">true</attr>
   <attr path="/api/namespace/object[@cname='GstBaseSink']/virtual_method[@cname='buffer_alloc']/parameters/parameter[@name='buf']" name="owned">true</attr>
   <attr path="/api/namespace/object[@cname='GstBaseSink']/virtual_method[@cname='buffer_alloc']/parameters/parameter[@name='buf']" name="pass_as">out</attr>
@@ -1067,7 +1074,6 @@
   <attr path="/api/namespace/object[@cname='GstBaseSrc']/virtual_method[@cname='create']/parameters/parameter[@name='buf']" name="owned">true</attr>
   <attr path="/api/namespace/object[@cname='GstBaseSrc']/virtual_method[@cname='create']/parameters/parameter[@name='buf']" name="pass_as">out</attr>
   <attr path="/api/namespace/object[@cname='GstBaseSrc']/virtual_method[@cname='query']" name="name">SrcQuery</attr>
-  <attr path="/api/namespace/object[@cname='GstBaseSrc']/method[@name='IsLive']" name="name">GetLive</attr>
   <attr path="/api/namespace/object[@cname='GstBaseSrc']/method[@name='IsLive']" name="name">GetLive</attr>
   <remove-node path="/api/namespace/object[@cname='GstBaseSrc']/constructor[@cname='gst_base_src_new_seamless_segment']"/>
   <add-node path="/api/namespace/object[@cname='GstBaseSrc']">
@@ -1109,6 +1115,17 @@
   <attr path="/api/namespace/struct[@cname='GstBitReader']/method[@cname='gst_bit_reader_peek_bits_uint16']" name="name">Peek</attr>
   <attr path="/api/namespace/struct[@cname='GstBitReader']/method[@cname='gst_bit_reader_peek_bits_uint32']" name="name">Peek</attr>
   <attr path="/api/namespace/struct[@cname='GstBitReader']/method[@cname='gst_bit_reader_peek_bits_uint64']" name="name">Peek</attr>
+  
+  <attr path="/api/namespace/struct[@cname='GstBitReader']/method[@cname='gst_bit_reader_get_bits_uint16_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstBitReader']/method[@cname='gst_bit_reader_get_bits_uint32_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstBitReader']/method[@cname='gst_bit_reader_get_bits_uint64_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstBitReader']/method[@cname='gst_bit_reader_get_bits_uint8_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstBitReader']/method[@cname='gst_bit_reader_peek_bits_uint16_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstBitReader']/method[@cname='gst_bit_reader_peek_bits_uint32_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstBitReader']/method[@cname='gst_bit_reader_peek_bits_uint64_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstBitReader']/method[@cname='gst_bit_reader_peek_bits_uint8_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstBitReader']/method[@cname='gst_bit_reader_skip_to_byte_unchecked']" name="hidden">1</attr>
+  
   <attr path="/api/namespace/struct[@cname='GstByteReader']/field" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_init']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_init_from_buffer']" name="hidden">1</attr>
@@ -1132,6 +1149,7 @@
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_get_uint32_be']" name="name">GetUInt32Be</attr>
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_get_uint64_le']" name="name">GetUint64Le</attr>
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_get_uint64_be']" name="name">GetUInt64Be</attr>
+  
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_get_float32_be_unchecked']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_get_float32_le_unchecked']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_get_float64_be_unchecked']" name="hidden">1</attr>
@@ -1176,6 +1194,7 @@
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_peek_uint32_be_unchecked']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_peek_uint64_le_unchecked']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_peek_uint64_be_unchecked']" name="hidden">1</attr>
+  
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_get_data']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_get_data_unchecked']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_peek_data_unchecked']" name="hidden">1</attr>
@@ -1187,7 +1206,6 @@
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_skip_string_utf16']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_dup_string_utf32']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_skip_string_utf32']" name="hidden">1</attr>
-  <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_skip_unchecked']" name="hidden">1</attr>
 
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_skip_string_utf8']" name="name">SkipString</attr>
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_get_string_utf8']" name="name">GetString</attr>
@@ -1196,6 +1214,7 @@
   <attr path="/api/namespace/struct[@cname='GstByteReader']/method[@cname='gst_byte_reader_peek_string_utf8']/parameters/parameter[@name='str']" name="pass_as">out</attr>
 
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/field" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_fill_unchecked']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_free_and_get_data']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_free_and_get_buffer']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_init']" name="hidden">1</attr>
@@ -1204,6 +1223,7 @@
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_init_with_size']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/constructor[@cname='gst_byte_writer_new_with_data']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_data']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_data_unchecked']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_string_utf16']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_string_utf32']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_string_utf8']" name="name">PutString</attr>
@@ -1216,9 +1236,34 @@
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_uint32_le']" name="name">PutUInt32Le</attr>
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_uint64_be']" name="name">PutUInt64Be</attr>
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_uint64_le']" name="name">PutUInt64Le</attr>
+  
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_float32_be_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_float32_le_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_float64_be_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_float64_le_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_int16_be_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_int16_le_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_int24_be_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_int24_le_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_int32_be_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_int32_le_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_int64_be_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_int64_le_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_int8_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_uint16_be_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_uint16_le_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_uint24_be_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_uint24_le_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_uint32_be_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_uint32_le_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_uint64_be_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_uint64_le_unchecked']" name="hidden">1</attr>
+  <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_put_uint8_unchecked']" name="hidden">1</attr>
+  
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_reset_and_get_data']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/constructor[@cname='gst_byte_writer_new_with_buffer']" name="hidden">1</attr>
   <attr path="/api/namespace/struct[@cname='GstByteWriter']/method[@cname='gst_byte_writer_reset_and_get_buffer']/return-type" name="owned">true</attr>
+  
   <add-node path="/api/namespace/struct[@cname='GstByteWriter']">
       <method name="GetFloat32Be" cname="gst_byte_reader_get_float32_be">
         <return-type type="gboolean" />
@@ -1574,7 +1619,7 @@
   <attr path="/api/namespace/callback[@cname='GstControlSourceGetValueArray']" name="hidden">1</attr>
 
   <attr path="/api/namespace/object[@cname='GstController']/property" name="hidden">1</attr>
-  <attr path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_get_all']" name="hidden">1</attr>
+  <remove-node path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_get_all']" />
   <attr path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_get_control_source']/return-type" name="owned">true</attr>
   <attr path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_get_value_array']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_get_value_arrays']" name="hidden">1</attr>
@@ -1585,11 +1630,11 @@
   <attr path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_remove_properties']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_remove_properties_list']" name="hidden">1</attr>
   <attr path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_remove_properties_valist']" name="hidden">1</attr>
-  <attr path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_set']" name="hidden">1</attr>
-  <attr path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_set_from_list']" name="hidden">1</attr>
-  <attr path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_set_interpolation_mode']" name="hidden">1</attr>
-  <attr path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_unset']" name="hidden">1</attr>
-  <attr path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_unset_all']" name="hidden">1</attr>
+  <remove-node path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_set']" />
+  <remove-node path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_set_from_list']" />
+  <remove-node path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_set_interpolation_mode']" />
+  <remove-node path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_unset']" />
+  <remove-node path="/api/namespace/object[@cname='GstController']/method[@cname='gst_controller_unset_all']" />
 
   <remove-node path="/api/namespace/object[@cname='GstControlSource']/class_struct" />
   <add-node path="/api/namespace/object[@cname='GstControlSource']">
@@ -1665,16 +1710,13 @@
   <attr path="/api/namespace/interface[@cname='GstColorBalance']/method[@cname='gst_color_balance_value_changed']" name="name">EmitValueChanged</attr>
 
 
-  <attr path="/api/namespace/interface[@cname='GstMixer']/signal" name="hidden">1</attr>
   <attr path="/api/namespace/interface[@cname='GstMixer']/method[@cname='gst_mixer_list_tracks']/return-type" name="element_type">GstMixerTrack</attr>
   <attr path="/api/namespace/interface[@cname='GstMixer']/virtual_method[@cname='list_tracks']/return-type" name="element_type">GstMixerTrack</attr>
   <remove-attr path="/api/namespace/interface[@cname='GstMixer']/method[@cname='gst_mixer_options_list_changed']" name="shared" />
   <remove-node path="/api/namespace/interface[@cname='GstMixer']/method[@cname='gst_mixer_options_list_changed']/parameters/parameter[@name='mixer']" />
 
-  <attr path="/api/namespace/object[@cname='GstMixerTrack']/signal" name="hidden">1</attr>
 
   <attr path="/api/namespace/object[@cname='GstMixerOptions']/field[@name='Values']" name="hidden">1</attr>
-  <attr path="/api/namespace/object[@cname='GstMixerOptions']/signal" name="hidden">1</attr>
   <attr path="/api/namespace/object[@cname='GstMixerOptions']/method[@cname='gst_mixer_options_get_values']/return-type" name="element_type">gchar*</attr>
   <attr path="/api/namespace/object[@cname='GstMixerOptions']/virtual_method[@cname='get_values']/return-type" name="element_type">gchar*</attr>
   <move-node path="/api/namespace/object[@cname='GstMixerOptions']/method[@cname='gst_mixer_options_list_changed']">/api/namespace/interface[@cname='GstMixer']</move-node>
@@ -1700,6 +1742,9 @@
   <attr path="/api/namespace/interface[@cname='GstNavigation']/method[@cname='gst_navigation_event_parse_mouse_button_event']" name="hidden">1</attr>
   <attr path="/api/namespace/interface[@cname='GstNavigation']/method[@cname='gst_navigation_event_parse_mouse_move_event']" name="hidden">1</attr>
   <attr path="/api/namespace/interface[@cname='GstNavigation']/method[@cname='gst_navigation_event_parse_command']" name="hidden">1</attr>
+
+  <attr path="/api/namespace/interface[@cname='GstPropertyProbe']/virtual_method[@cname='get_properties']/return-type" name="element_type">GParamSpec</attr>
+  <attr path="/api/namespace/interface[@cname='GstPropertyProbe']/method[@cname='gst_property_probe_get_properties']/return-type" name="element_type">GParamSpec</attr>
 
   <attr path="/api/namespace/interface[@cname='GstStreamVolume']/property" name="hidden">1</attr>
 
@@ -1731,7 +1776,8 @@
   <attr path="/api/namespace/interface[@cname='GstVideoOrientation']/method[@cname='gst_video_orientation_get_vcenter']/parameters/parameter[@name='center']" name="pass_as">out</attr>
 
   <attr path="/api/namespace/interface[@cname='GstXOverlay']" name="name">XOverlay</attr>
-
+  <attr path="/api/namespace/interface[@cname='GstXOverlay']/virtual_method[@name='SetXwindowIdDisabled']" name="hidden">1</attr>
+  
   <!-- GStreamer Video library -->
   <add-node path="/api/namespace[@name='Gst.Video']"><class name="VideoUtil" cname="GstVideoUtil" disable_void_ctor="1" /></add-node>
   <move-node path="/api/namespace/class[@name='Global']/method[@cname='gst_video_get_size']">/api/namespace/class[@cname='GstVideoUtil']</move-node>
@@ -1779,6 +1825,19 @@
   <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Yvyu']" name="name">YVYU</attr>
   <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Nv12']" name="name">NV12</attr>
   <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Nv21']" name="name">NV21</attr>
+  <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Gray8']" name="name">GRAY8</attr>
+  <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Gray16Be']" name="name">GRAY16BE</attr>
+  <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Gray16Le']" name="name">GRAY16LE</attr>
+  <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Rgb16']" name="name">RGB16</attr>
+  <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Bgr16']" name="name">BGR16</attr>
+  <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Rgb15']" name="name">RGB15</attr>
+  <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Bgr15']" name="name">BGR15</attr>
+  <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Uyvp']" name="name">UYVP</attr>
+  <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Rgb8Paletted']" name="name">RGB8PALETTED</attr>
+  <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Yuv9']" name="name">YUV9</attr>
+  <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Yvu9']" name="name">YVU9</attr>
+  <attr path="/api/namespace/enum[@cname='GstVideoFormat']/member[@name='Iyu1']" name="name">IYU1</attr>
+
 
   <attr path="/api/namespace/class[@cname='GstVideoEvent_']" name="hidden">1</attr>
 
@@ -1852,5 +1911,44 @@
     </class>
   </add-node>
 
+  <change-node-type path="/api/namespace/object[@name='DiscovererAudioInfo']">mini-object</change-node-type>
+  <attr path="/api/namespace/mini-object[@name='DiscovererAudioInfo']" name="parent">GstDiscovererStreamInfo</attr>
+  <change-node-type path="/api/namespace/object[@name='DiscovererContainerInfo']">mini-object</change-node-type>
+  <attr path="/api/namespace/mini-object[@name='DiscovererContainerInfo']" name="parent">GstDiscovererStreamInfo</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererContainerInfo']/method[@cname='gst_discoverer_container_info_get_streams']/return-type" name="element_type">GstDiscovererStreamInfo</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererContainerInfo']/method[@cname='gst_discoverer_container_info_get_streams']/return-type" name="owned">true</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererContainerInfo']/method[@cname='gst_discoverer_container_info_get_streams']/return-type" name="elements_owned">true</attr>
+  <change-node-type path="/api/namespace/object[@name='DiscovererInfo']">mini-object</change-node-type>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']" name="parent">GstMiniObject</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_audio_streams']/return-type" name="element_type">GstDiscovererAudioInfo</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_audio_streams']/return-type" name="owned">true</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_audio_streams']/return-type" name="elements_owned">true</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_container_streams']/return-type" name="element_type">GstDiscovererContainerInfo</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_container_streams']/return-type" name="owned">true</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_container_streams']/return-type" name="elements_owned">true</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_stream_info']/return-type" name="owned">true</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_stream_list']/return-type" name="element_type">GstDiscovererStreamInfo</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_stream_list']/return-type" name="owned">true</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_stream_list']/return-type" name="elements_owned">true</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_streams']/return-type" name="element_type">GstDiscovererStreamInfo</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_video_streams']/return-type" name="element_type">GstDiscovererVideoInfo</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_video_streams']/return-type" name="owned">true</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_get_video_streams']/return-type" name="elements_owned">true</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererInfo']/method[@cname='gst_discoverer_info_copy']" name="new_flag">1</attr>
+  <change-node-type path="/api/namespace/object[@name='DiscovererStreamInfo']">mini-object</change-node-type>
+  <attr path="/api/namespace/mini-object[@name='DiscovererStreamInfo']" name="parent">GstMiniObject</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererStreamInfo']/method[@cname='gst_discoverer_stream_info_get_caps']/return-type" name="owned">true</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererStreamInfo']/method[@cname='gst_discoverer_stream_info_get_next']/return-type" name="owned">true</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererStreamInfo']/method[@cname='gst_discoverer_stream_info_get_previous']/return-type" name="owned">true</attr>
+  <attr path="/api/namespace/mini-object[@name='DiscovererStreamInfo']/method[@cname='gst_discoverer_stream_info_list_free']" name="hide">1</attr>
+  <change-node-type path="/api/namespace/object[@name='DiscovererVideoInfo']">mini-object</change-node-type>
+  <attr path="/api/namespace/mini-object[@name='DiscovererVideoInfo']" name="parent">GstDiscovererStreamInfo</attr>
+ 
+
+  <attr path="/api/namespace/object[@name='EncodingContainerProfile']/method[@cname='gst_encoding_container_profile_get_profiles']/return-type" name="element_type">GstEncodingContainerProfile</attr>
+  <change-node-type path="/api/namespace/object[@name='EncodingProfile']">mini-object</change-node-type>
+  <change-node-type path="/api/namespace/object[@name='EncodingTarget']">mini-object</change-node-type>
+  <attr path="/api/namespace/mini-object[@name='EncodingTarget']/method[@cname='gst_encoding_target_get_profiles']/return-type" name="element_type">GstEncodingProfile</attr>
+  
 
 </metadata>

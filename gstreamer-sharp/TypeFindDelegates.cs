@@ -10,7 +10,6 @@ namespace Gst {
 
 namespace GstSharp {
 
-  [Gst.GLib.CDeclCallback]
   internal delegate IntPtr TypeFindPeekFunctionNative (IntPtr data, long offset, uint size);
 
   internal class TypeFindPeekFunctionInvoker {
@@ -109,7 +108,6 @@ namespace GstSharp {
     }
   }
 
-  [Gst.GLib.CDeclCallback]
   internal delegate void TypeFindSuggestFunctionNative (IntPtr data, uint propability, IntPtr caps);
 
   internal class TypeFindSuggestFunctionInvoker {
@@ -185,7 +183,6 @@ namespace GstSharp {
     }
   }
 
-  [Gst.GLib.CDeclCallback]
   internal delegate ulong TypeFindGetLengthFunctionNative (IntPtr data);
 
   internal class TypeFindGetLengthFunctionInvoker {

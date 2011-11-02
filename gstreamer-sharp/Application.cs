@@ -136,6 +136,13 @@ namespace Gst {
       Gst.GLib.GType.Register (GhostPad.GType, typeof (GhostPad));
       Gst.GLib.GType.Register (Message.GType, typeof (Message));
       Gst.GLib.GType.Register (SystemClock.GType, typeof (SystemClock));
+      Gst.GLib.GType.Register (PbUtils.DiscovererAudioInfo.GType, typeof (PbUtils.DiscovererAudioInfo));
+      Gst.GLib.GType.Register (PbUtils.DiscovererContainerInfo.GType, typeof (PbUtils.DiscovererContainerInfo));
+      Gst.GLib.GType.Register (PbUtils.DiscovererInfo.GType, typeof (PbUtils.DiscovererInfo));
+      Gst.GLib.GType.Register (PbUtils.DiscovererStreamInfo.GType, typeof (PbUtils.DiscovererStreamInfo));
+      Gst.GLib.GType.Register (PbUtils.DiscovererVideoInfo.GType, typeof (PbUtils.DiscovererVideoInfo));
+      Gst.GLib.GType.Register (PbUtils.EncodingProfile.GType, typeof (PbUtils.EncodingProfile));
+      Gst.GLib.GType.Register (PbUtils.EncodingTarget.GType, typeof (PbUtils.EncodingTarget));
 
       GtkSharp.GstreamerSharp.ObjectManager.Initialize ();
     }

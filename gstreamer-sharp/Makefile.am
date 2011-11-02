@@ -47,8 +47,6 @@ sources = \
 	EnumInfo.cs \
 	MiniObject.cs \
 	Marshaller.cs \
-	GstSharp.PadQueryTypeFunctionNative.cs \
-	PadQueryTypeFunction.cs \
 	TypeFindDelegates.cs \
 	PresetDefault.cs \
 	MissingPluginMessage.cs \

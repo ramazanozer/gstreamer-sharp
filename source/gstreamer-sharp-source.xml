@@ -29,6 +29,8 @@
         <exclude>../../gstreamer/gst/glib-i18n-app.h</exclude>
         <exclude>../../gstreamer/gst/gstquark.h</exclude>
         <exclude>../../gstreamer/gst/gettext.h</exclude>
+        <exclude>../../gstreamer/gst/gstelementdetails.h</exclude>
+        <exclude>../../gstreamer/gst/math-compat.h</exclude>
       </namespace>
     </library>
     <library name="libgstbase-0.10.dll">
@@ -37,6 +39,10 @@
 	<!-- Needs to be bound -->
         <exclude>../../gstreamer/libs/gst/base/gstdataqueue.h</exclude>
         <exclude>../../gstreamer/libs/gst/base/gstcollectpads.h</exclude>
+        <!-- Private headers -->
+        <exclude>../../gstreamer/gst/gstbitreader-docs.h</exclude>
+        <exclude>../../gstreamer/gst/gstbytereader-docs.h</exclude>
+        <exclude>../../gstreamer/gst/gstbytewriter-docs.h</exclude>
       </namespace>
     </library>
     <library name="libgstcontroller-0.10.dll">
@@ -73,6 +79,8 @@
     <library name="libgstpbutils-0.10.dll">
       <namespace name="Gst.PbUtils">
         <dir>../../gst-plugins-base/gst-libs/gst/pbutils</dir>
+        <!-- Private headers -->
+	<exclude>../../gst-plugins-base/gst-libs/gst/pbutils/pbutils-private.h</exclude>
       </namespace>
     </library>
   </api>

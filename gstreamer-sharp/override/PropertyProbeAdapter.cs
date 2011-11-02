@@ -203,12 +203,10 @@ namespace Gst.Interfaces {
 		[Gst.GLib.Signal("probe-needed")]
 		public event Gst.Interfaces.ProbeNeededHandler ProbeNeeded {
 			add {
-				Gst.GLib.Signal sig = Gst.GLib.Signal.Lookup (Gst.GLib.Object.GetObject (Handle), "probe-needed", typeof (Gst.Interfaces.ProbeNeededArgs));
-				sig.AddDelegate (value);
+				Gst.GLib.Object.GetObject (Handle).AddSignalHandler ("probe-needed", value, typeof (Gst.Interfaces.ProbeNeededArgs));
 			}
 			remove {
-				Gst.GLib.Signal sig = Gst.GLib.Signal.Lookup (Gst.GLib.Object.GetObject (Handle), "probe-needed", typeof (Gst.Interfaces.ProbeNeededArgs));
-				sig.RemoveDelegate (value);
+				Gst.GLib.Object.GetObject (Handle).RemoveSignalHandler ("probe-needed", value);
 			}
 		}
 

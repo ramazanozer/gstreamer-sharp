@@ -362,7 +362,7 @@ namespace Gst {
   }
 
   public class Date : IWrapper {
-    public DateTime Val;
+    public System.DateTime Val;
 
     private IntPtr handle;
     public IntPtr Handle {
@@ -381,20 +381,20 @@ namespace Gst {
       g_date_free (handle);
     }
 
-    public Date (DateTime date) {
+    public Date (System.DateTime date) {
       this.Val = date;
       handle = g_date_new_dmy ( (byte) Val.Day, (int) Val.Month, (ushort) Val.Year);
     }
 
     public Date (int day, int month, int year) {
-      this.Val = new DateTime (year, month, day);
+      this.Val = new System.DateTime (year, month, day);
       handle = g_date_new_dmy ( (byte) Val.Day, (int) Val.Month, (ushort) Val.Year);
     }
 
     public Date (Gst.GLib.Value val) {
       IntPtr date = gst_value_get_date (ref val);
 
-      this.Val = new DateTime (g_date_get_year (date), g_date_get_month (date), g_date_get_day (date));
+      this.Val = new System.DateTime (g_date_get_year (date), g_date_get_month (date), g_date_get_day (date));
       handle = g_date_new_dmy ( (byte) Val.Day, (int) Val.Month, (ushort) Val.Year);
     }
 

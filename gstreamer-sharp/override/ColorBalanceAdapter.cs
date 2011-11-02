@@ -173,12 +173,10 @@ namespace Gst.Interfaces {
 		[Gst.GLib.Signal("value-changed")]
 		public event Gst.Interfaces.ValueChangedHandler ValueChanged {
 			add {
-				Gst.GLib.Signal sig = Gst.GLib.Signal.Lookup (Gst.GLib.Object.GetObject (Handle), "value-changed", typeof (Gst.Interfaces.ValueChangedArgs));
-				sig.AddDelegate (value);
+				Gst.GLib.Object.GetObject (Handle).AddSignalHandler ("value-changed", value, typeof (Gst.Interfaces.ValueChangedArgs));
 			}
 			remove {
-				Gst.GLib.Signal sig = Gst.GLib.Signal.Lookup (Gst.GLib.Object.GetObject (Handle), "value-changed", typeof (Gst.Interfaces.ValueChangedArgs));
-				sig.RemoveDelegate (value);
+				Gst.GLib.Object.GetObject (Handle).RemoveSignalHandler ("value-changed", value);
 			}
 		}
 

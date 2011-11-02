@@ -13,10 +13,10 @@
 		}
 
 		[DllImport("libgstinterfaces-0.10.dll")]
-		static extern void gst_x_overlay_got_xwindow_id(IntPtr raw, UIntPtr xwindow_id);
+		static extern void gst_x_overlay_got_window_handle(IntPtr raw, ulong handle);
 
-		void Gst.Interfaces.XOverlay.GotXwindowId(ulong xwindow_id) {
-			gst_x_overlay_got_xwindow_id(Handle, new UIntPtr (xwindow_id));
+		void Gst.Interfaces.XOverlay.GotWindowHandle(ulong handle) {
+			gst_x_overlay_got_window_handle(Handle, handle);
 		}
 
 		[DllImport("libgstinterfaces-0.10.dll")]
@@ -26,12 +26,31 @@
 			gst_x_overlay_prepare_xwindow_id(Handle);
 		}
 
+/*
 		[DllImport("libgstinterfaces-0.10.dll")]
-		static extern void gst_x_overlay_set_xwindow_id(IntPtr raw, UIntPtr xwindow_id);
+		static extern void gst_x_overlay_set_xwindow_id_disabled(IntPtr raw, UIntPtr xwindow_id);
 
-		ulong Gst.Interfaces.XOverlay.XwindowId { 
+		ulong Gst.Interfaces.XOverlay.XwindowIdDisabled { 
 			set {
-				gst_x_overlay_set_xwindow_id(Handle, new UIntPtr (value));
+				gst_x_overlay_set_xwindow_id_disabled(Handle, new UIntPtr (value));
 			}
 		}
+*/
+		
+		[DllImport("libgstinterfaces-0.10.dll")]
+		static extern bool gst_x_overlay_set_render_rectangle(IntPtr raw, int x, int y, int width, int height);
 
+		bool Gst.Interfaces.XOverlay.SetRenderRectangle(int x, int y, int width, int height) {
+			bool raw_ret = gst_x_overlay_set_render_rectangle(Handle, x, y, width, height);
+			bool ret = raw_ret;
+			return ret;
+		}
+
+		[DllImport("libgstinterfaces-0.10.dll")]
+		static extern void gst_x_overlay_set_window_handle(IntPtr raw, ulong handle);
+
+		ulong Gst.Interfaces.XOverlay.WindowHandle {
+			set {
+				gst_x_overlay_set_window_handle(Handle, value);
+ 			}
+ 		}

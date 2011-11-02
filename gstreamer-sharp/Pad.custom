@@ -37,11 +37,11 @@ static extern void gst_pad_set_bufferalloc_function (IntPtr raw, GstSharp.PadBuf
 
 public Gst.PadBufferAllocFunction BufferAllocFunction {
   set {
-    if (PersistentData["BufferAllocFunction"] != null)
-      PersistentData["BufferAllocFunction"] = null;
+    if (Data["BufferAllocFunction"] != null)
+      Data["BufferAllocFunction"] = null;
 
     GstSharp.PadBufferAllocFunctionWrapper value_wrapper = new GstSharp.PadBufferAllocFunctionWrapper (value);
-    PersistentData["BufferAllocFunction"] = value_wrapper;
+    Data["BufferAllocFunction"] = value_wrapper;
     gst_pad_set_bufferalloc_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -51,11 +51,11 @@ static extern void gst_pad_set_chain_function (IntPtr raw, GstSharp.PadChainFunc
 
 public Gst.PadChainFunction ChainFunction {
   set {
-    if (PersistentData["ChainFunction"] != null)
-      PersistentData["ChainFunction"] = null;
+    if (Data["ChainFunction"] != null)
+      Data["ChainFunction"] = null;
 
     GstSharp.PadChainFunctionWrapper value_wrapper = new GstSharp.PadChainFunctionWrapper (value);
-    PersistentData["ChainFunction"] = value_wrapper;
+    Data["ChainFunction"] = value_wrapper;
     gst_pad_set_chain_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -65,11 +65,11 @@ static extern void gst_pad_set_chain_list_function (IntPtr raw, GstSharp.PadChai
 
 public Gst.PadChainListFunction ChainListFunction {
   set {
-    if (PersistentData["ChainListFunction"] != null)
-      PersistentData["ChainListFunction"] = null;
+    if (Data["ChainListFunction"] != null)
+      Data["ChainListFunction"] = null;
 
     GstSharp.PadChainListFunctionWrapper value_wrapper = new GstSharp.PadChainListFunctionWrapper (value);
-    PersistentData["ChainListFunction"] = value_wrapper;
+    Data["ChainListFunction"] = value_wrapper;
     gst_pad_set_chain_list_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -79,11 +79,11 @@ static extern void gst_pad_set_checkgetrange_function (IntPtr raw, GstSharp.PadC
 
 public Gst.PadCheckGetRangeFunction CheckGetRangeFunction {
   set {
-    if (PersistentData["CheckGetRangeFunction"] != null)
-      PersistentData["CheckGetRangeFunction"] = null;
+    if (Data["CheckGetRangeFunction"] != null)
+      Data["CheckGetRangeFunction"] = null;
 
     GstSharp.PadCheckGetRangeFunctionWrapper value_wrapper = new GstSharp.PadCheckGetRangeFunctionWrapper (value);
-    PersistentData["CheckGetRangeFunction"] = value_wrapper;
+    Data["CheckGetRangeFunction"] = value_wrapper;
     gst_pad_set_checkgetrange_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -93,11 +93,11 @@ static extern void gst_pad_set_getrange_function (IntPtr raw, GstSharp.PadGetRan
 
 public Gst.PadGetRangeFunction GetRangeFunction {
   set {
-    if (PersistentData["GetRangeFunction"] != null)
-      PersistentData["GetRangeFunction"] = null;
+    if (Data["GetRangeFunction"] != null)
+      Data["GetRangeFunction"] = null;
 
     GstSharp.PadGetRangeFunctionWrapper value_wrapper = new GstSharp.PadGetRangeFunctionWrapper (value);
-    PersistentData["GetRangeFunction"] = value_wrapper;
+    Data["GetRangeFunction"] = value_wrapper;
     gst_pad_set_getrange_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -107,11 +107,11 @@ static extern void gst_pad_set_event_function (IntPtr raw, GstSharp.PadEventFunc
 
 public Gst.PadEventFunction EventFunction {
   set {
-    if (PersistentData["EventFunction"] != null)
-      PersistentData["EventFunction"] = null;
+    if (Data["EventFunction"] != null)
+      Data["EventFunction"] = null;
 
     GstSharp.PadEventFunctionWrapper value_wrapper = new GstSharp.PadEventFunctionWrapper (value);
-    PersistentData["EventFunction"] = value_wrapper;
+    Data["EventFunction"] = value_wrapper;
     gst_pad_set_event_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -121,11 +121,11 @@ static extern void gst_pad_set_link_function (IntPtr raw, GstSharp.PadLinkFuncti
 
 public Gst.PadLinkFunction LinkFunction {
   set {
-    if (PersistentData["LinkFunction"] != null)
-      PersistentData["LinkFunction"] = null;
+    if (Data["LinkFunction"] != null)
+      Data["LinkFunction"] = null;
 
     GstSharp.PadLinkFunctionWrapper value_wrapper = new GstSharp.PadLinkFunctionWrapper (value);
-    PersistentData["LinkFunction"] = value_wrapper;
+    Data["LinkFunction"] = value_wrapper;
     gst_pad_set_link_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -135,11 +135,11 @@ static extern void gst_pad_set_unlink_function (IntPtr raw, GstSharp.PadUnlinkFu
 
 public Gst.PadUnlinkFunction UnlinkFunction {
   set {
-    if (PersistentData["UnlinkFunction"] != null)
-      PersistentData["UnlinkFunction"] = null;
+    if (Data["UnlinkFunction"] != null)
+      Data["UnlinkFunction"] = null;
 
     GstSharp.PadUnlinkFunctionWrapper value_wrapper = new GstSharp.PadUnlinkFunctionWrapper (value);
-    PersistentData["UnlinkFunction"] = value_wrapper;
+    Data["UnlinkFunction"] = value_wrapper;
     gst_pad_set_unlink_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -149,11 +149,11 @@ static extern void gst_pad_set_acceptcaps_function (IntPtr raw, GstSharp.PadAcce
 
 public Gst.PadAcceptCapsFunction AcceptCapsFunction {
   set {
-    if (PersistentData["AcceptCapsFunction"] != null)
-      PersistentData["AcceptCapsFunction"] = null;
+    if (Data["AcceptCapsFunction"] != null)
+      Data["AcceptCapsFunction"] = null;
 
     GstSharp.PadAcceptCapsFunctionWrapper value_wrapper = new GstSharp.PadAcceptCapsFunctionWrapper (value);
-    PersistentData["AcceptCapsFunction"] = value_wrapper;
+    Data["AcceptCapsFunction"] = value_wrapper;
     gst_pad_set_acceptcaps_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -163,11 +163,11 @@ static extern void gst_pad_set_getcaps_function (IntPtr raw, GstSharp.PadGetCaps
 
 public Gst.PadGetCapsFunction GetCapsFunction {
   set {
-    if (PersistentData["GetCapsFunction"] != null)
-      PersistentData["GetCapsFunction"] = null;
+    if (Data["GetCapsFunction"] != null)
+      Data["GetCapsFunction"] = null;
 
     GstSharp.PadGetCapsFunctionWrapper value_wrapper = new GstSharp.PadGetCapsFunctionWrapper (value);
-    PersistentData["GetCapsFunction"] = value_wrapper;
+    Data["GetCapsFunction"] = value_wrapper;
     gst_pad_set_getcaps_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -177,11 +177,11 @@ static extern void gst_pad_set_setcaps_function (IntPtr raw, GstSharp.PadSetCaps
 
 public Gst.PadSetCapsFunction SetCapsFunction {
   set {
-    if (PersistentData["SetCapsFunction"] != null)
-      PersistentData["SetCapsFunction"] = null;
+    if (Data["SetCapsFunction"] != null)
+      Data["SetCapsFunction"] = null;
 
     GstSharp.PadSetCapsFunctionWrapper value_wrapper = new GstSharp.PadSetCapsFunctionWrapper (value);
-    PersistentData["SetCapsFunction"] = value_wrapper;
+    Data["SetCapsFunction"] = value_wrapper;
     gst_pad_set_setcaps_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -191,11 +191,11 @@ static extern void gst_pad_set_fixatecaps_function (IntPtr raw, GstSharp.PadFixa
 
 public Gst.PadFixateCapsFunction FixateCapsFunction {
   set {
-    if (PersistentData["FixateCapsFunction"] != null)
-      PersistentData["FixateCapsFunction"] = null;
+    if (Data["FixateCapsFunction"] != null)
+      Data["FixateCapsFunction"] = null;
 
     GstSharp.PadFixateCapsFunctionWrapper value_wrapper = new GstSharp.PadFixateCapsFunctionWrapper (value);
-    PersistentData["FixateCapsFunction"] = value_wrapper;
+    Data["FixateCapsFunction"] = value_wrapper;
     gst_pad_set_fixatecaps_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -205,11 +205,11 @@ static extern void gst_pad_set_activate_function (IntPtr raw, GstSharp.PadActiva
 
 public Gst.PadActivateFunction ActivateFunction {
   set {
-    if (PersistentData["ActivateFunction"] != null)
-      PersistentData["ActivateFunction"] = null;
+    if (Data["ActivateFunction"] != null)
+      Data["ActivateFunction"] = null;
 
     GstSharp.PadActivateFunctionWrapper value_wrapper = new GstSharp.PadActivateFunctionWrapper (value);
-    PersistentData["ActivateFunction"] = value_wrapper;
+    Data["ActivateFunction"] = value_wrapper;
     gst_pad_set_activate_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -219,11 +219,11 @@ static extern void gst_pad_set_activatepull_function (IntPtr raw, GstSharp.PadAc
 
 public Gst.PadActivateModeFunction ActivatePullFunction {
   set {
-    if (PersistentData["ActivatePullFunction"] != null)
-      PersistentData["ActivatePullFunction"] = null;
+    if (Data["ActivatePullFunction"] != null)
+      Data["ActivatePullFunction"] = null;
 
     GstSharp.PadActivateModeFunctionWrapper value_wrapper = new GstSharp.PadActivateModeFunctionWrapper (value);
-    PersistentData["ActivatePullFunction"] = value_wrapper;
+    Data["ActivatePullFunction"] = value_wrapper;
     gst_pad_set_activatepull_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -233,11 +233,11 @@ static extern void gst_pad_set_activatepush_function (IntPtr raw, GstSharp.PadAc
 
 public Gst.PadActivateModeFunction ActivatePushFunction {
   set {
-    if (PersistentData["ActivatePushFunction"] != null)
-      PersistentData["ActivatePushFunction"] = null;
+    if (Data["ActivatePushFunction"] != null)
+      Data["ActivatePushFunction"] = null;
 
     GstSharp.PadActivateModeFunctionWrapper value_wrapper = new GstSharp.PadActivateModeFunctionWrapper (value);
-    PersistentData["ActivatePushFunction"] = value_wrapper;
+    Data["ActivatePushFunction"] = value_wrapper;
     gst_pad_set_activatepush_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -259,11 +259,11 @@ static extern void gst_pad_set_query_function (IntPtr raw, GstSharp.PadQueryFunc
 
 public Gst.PadQueryFunction QueryFunction {
   set {
-    if (PersistentData["QueryFunction"] != null)
-      PersistentData["QueryFunction"] = null;
+    if (Data["QueryFunction"] != null)
+      Data["QueryFunction"] = null;
 
     GstSharp.PadQueryFunctionWrapper value_wrapper = new GstSharp.PadQueryFunctionWrapper (value);
-    PersistentData["QueryFunction"] = value_wrapper;
+    Data["QueryFunction"] = value_wrapper;
     gst_pad_set_query_function (Handle, value_wrapper.NativeDelegate);
   }
 }
@@ -273,11 +273,11 @@ static extern void gst_pad_set_query_type_function (IntPtr raw, GstSharp.PadQuer
 
 public Gst.PadQueryTypeFunction QueryTypeFunction {
   set {
-    if (PersistentData["QueryTypeFunction"] != null)
-      PersistentData["QueryTypeFunction"] = null;
+    if (Data["QueryTypeFunction"] != null)
+      Data["QueryTypeFunction"] = null;
 
     GstSharp.PadQueryTypeFunctionWrapper value_wrapper = new GstSharp.PadQueryTypeFunctionWrapper (value);
-    PersistentData["QueryTypeFunction"] = value_wrapper;
+    Data["QueryTypeFunction"] = value_wrapper;
     gst_pad_set_query_type_function (Handle, value_wrapper.NativeDelegate);
   }
 }
